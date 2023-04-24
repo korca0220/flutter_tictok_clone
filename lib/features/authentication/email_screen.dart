@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:tictok_clone/constants/gaps.dart';
 import 'package:tictok_clone/constants/sizes.dart';
+import 'package:tictok_clone/features/authentication/widgets/form_button.dart';
 
-class NameScreen extends StatefulWidget {
-  const NameScreen({super.key});
+class EmailScreen extends StatefulWidget {
+  const EmailScreen({super.key});
 
   @override
-  State<NameScreen> createState() => _NameScreenState();
+  State<EmailScreen> createState() => _EmailScreenState();
 }
 
-class _NameScreenState extends State<NameScreen> {
+class _EmailScreenState extends State<EmailScreen> {
   final _usernameController = TextEditingController();
   String _username = '';
 
@@ -21,6 +22,12 @@ class _NameScreenState extends State<NameScreen> {
         _username = _usernameController.text;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -39,18 +46,10 @@ class _NameScreenState extends State<NameScreen> {
           children: [
             Gaps.v10,
             const Text(
-              'Create username',
+              'What is your email?',
               style: TextStyle(
                 fontSize: Sizes.size20,
                 fontWeight: FontWeight.w800,
-              ),
-            ),
-            Gaps.v10,
-            const Text(
-              'You can always change this later.',
-              style: TextStyle(
-                fontSize: Sizes.size16,
-                color: Colors.black54,
               ),
             ),
             Gaps.v16,
@@ -58,7 +57,7 @@ class _NameScreenState extends State<NameScreen> {
               controller: _usernameController,
               cursorColor: Theme.of(context).primaryColor,
               decoration: InputDecoration(
-                hintText: 'Username',
+                hintText: 'Email',
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.grey.shade400,
@@ -72,26 +71,8 @@ class _NameScreenState extends State<NameScreen> {
               ),
             ),
             Gaps.v16,
-            FractionallySizedBox(
-              widthFactor: 1,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(vertical: Sizes.size16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Sizes.size5),
-                  color: _username.isEmpty
-                      ? Colors.grey.shade400
-                      : Theme.of(context).primaryColor,
-                ),
-                child: const Text(
-                  'Next',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
+            FormButton(
+              disabled: _username.isEmpty,
             ),
           ],
         ),

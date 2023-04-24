@@ -3,7 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tictok_clone/constants/gaps.dart';
 import 'package:tictok_clone/constants/sizes.dart';
 import 'package:tictok_clone/features/authentication/login_screen.dart';
-import 'package:tictok_clone/features/authentication/name_screen.dart';
+import 'package:tictok_clone/features/authentication/email_screen.dart';
+import 'package:tictok_clone/features/authentication/username_screen.dart';
 import 'package:tictok_clone/features/authentication/widgets/auth_button.dart';
 
 void _onLoginTap(BuildContext context) {
@@ -17,7 +18,7 @@ void _onLoginTap(BuildContext context) {
 void _onEmailTap(BuildContext context) {
   Navigator.push(context, MaterialPageRoute(
     builder: (context) {
-      return const NameScreen();
+      return const UsernameScreen();
     },
   ));
 }
