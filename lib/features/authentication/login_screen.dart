@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tictok_clone/constants/gaps.dart';
 import 'package:tictok_clone/constants/sizes.dart';
+import 'package:tictok_clone/features/authentication/widgets/auth_button.dart';
 
 void onLoginTap(BuildContext context) {
   Navigator.of(context).pop();
 }
+
+_onEmailTap(BuildContext context) {}
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -18,9 +22,9 @@ class LoginScreen extends StatelessWidget {
             horizontal: Sizes.size40,
           ),
           child: Column(
-            children: const [
+            children: [
               Gaps.v80,
-              Text(
+              const Text(
                 'Login for TikTok',
                 style: TextStyle(
                   fontSize: Sizes.size24,
@@ -28,14 +32,26 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               Gaps.v20,
-              Text(
+              const Text(
                 'Create a profile, follow other accounts, make your own videos, and more.',
                 style: TextStyle(
                   fontSize: Sizes.size16,
                   color: Colors.black45,
                 ),
                 textAlign: TextAlign.center,
-              )
+              ),
+              Gaps.v40,
+              AuthButton(
+                icon: const FaIcon(FontAwesomeIcons.user),
+                text: 'Use Email & Password',
+                onTap: () => _onEmailTap(context),
+              ),
+              Gaps.v16,
+              AuthButton(
+                icon: const FaIcon(FontAwesomeIcons.facebook),
+                text: 'Continue with Facebook',
+                onTap: () {},
+              ),
             ],
           ),
         ),
