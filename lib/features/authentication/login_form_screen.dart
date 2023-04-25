@@ -21,11 +21,13 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
       if (_formKey.currentState!.validate()) {
         // TextFormField onSaved 콜백
         _formKey.currentState!.save();
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => const InterestsScreen(),
-            ));
+            ), (route) {
+          return false;
+        });
       }
     }
   }
