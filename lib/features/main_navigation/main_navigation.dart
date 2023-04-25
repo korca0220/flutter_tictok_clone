@@ -5,6 +5,7 @@ import 'package:tictok_clone/constants/sizes.dart';
 import 'package:tictok_clone/features/main_navigation/stf_screen.dart';
 import 'package:tictok_clone/features/main_navigation/widgets/nav_tab.dart';
 import 'package:tictok_clone/features/main_navigation/widgets/post_video_button.dart';
+import 'package:tictok_clone/features/videos/videos_timeline_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -40,19 +41,19 @@ class _MainNavigationState extends State<MainNavigation> {
         children: [
           Offstage(
             offstage: _currentIndex != 0,
-            child: const StfScreen(),
+            child: const VideosTimelineScreen(),
           ),
           Offstage(
             offstage: _currentIndex != 1,
-            child: const StfScreen(),
+            child: Container(),
           ),
           Offstage(
             offstage: _currentIndex != 3,
-            child: const StfScreen(),
+            child: Container(),
           ),
           Offstage(
             offstage: _currentIndex != 4,
-            child: const StfScreen(),
+            child: Container(),
           ),
         ],
       ),
