@@ -4,6 +4,7 @@ import 'package:tictok_clone/constants/gaps.dart';
 import 'package:tictok_clone/constants/sizes.dart';
 import 'package:tictok_clone/features/main_navigation/stf_screen.dart';
 import 'package:tictok_clone/features/main_navigation/widgets/nav_tab.dart';
+import 'package:tictok_clone/features/main_navigation/widgets/post_video_button.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -15,18 +16,21 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
-  final screens = [
-    StfScreen(),
-    StfScreen(),
-    Container(),
-    StfScreen(),
-    StfScreen(),
-  ];
-
   void _onTap(int index) {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  void _onPostVideoButtonTap() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => Scaffold(
+        appBar: AppBar(
+          title: Text('Record Video'),
+        ),
+      ),
+      fullscreenDialog: true,
+    ));
   }
 
   @override
@@ -73,6 +77,12 @@ class _MainNavigationState extends State<MainNavigation> {
                 isSelected: _currentIndex == 1,
                 onTap: () => _onTap(1),
               ),
+              Gaps.h24,
+              GestureDetector(
+                onTap: _onPostVideoButtonTap,
+                child: const PostVideoButton(),
+              ),
+              Gaps.h24,
               NavTab(
                 icon: FontAwesomeIcons.message,
                 selectedIcon: FontAwesomeIcons.solidMessage,
