@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tictok_clone/constants/gaps.dart';
+import 'package:tictok_clone/constants/sizes.dart';
+import 'package:tictok_clone/features/main_navigation/widgets/nav_tab.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -38,38 +41,40 @@ class _MainNavigationState extends State<MainNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onTap,
-        // selectedItemColor: Theme.of(context).primaryColor,
-        items: const [
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.house),
-            label: "Home",
-            backgroundColor: Colors.amber,
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.black,
+        child: Padding(
+          padding: const EdgeInsets.all(Sizes.size12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              NavTab(
+                icon: FontAwesomeIcons.house,
+                text: 'Home',
+                isSelected: _currentIndex == 0,
+                onTap: () => _onTap(0),
+              ),
+              NavTab(
+                icon: FontAwesomeIcons.magnifyingGlass,
+                text: 'Discover',
+                isSelected: _currentIndex == 1,
+                onTap: () => _onTap(1),
+              ),
+              NavTab(
+                icon: FontAwesomeIcons.message,
+                text: 'Inbox',
+                isSelected: _currentIndex == 3,
+                onTap: () => _onTap(3),
+              ),
+              NavTab(
+                icon: FontAwesomeIcons.user,
+                text: 'Profile',
+                isSelected: _currentIndex == 4,
+                onTap: () => _onTap(4),
+              ),
+            ],
           ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-            label: "Search",
-            backgroundColor: Colors.blue,
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.house),
-            label: "Home",
-            backgroundColor: Colors.pink,
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-            label: "Search",
-            backgroundColor: Colors.yellow,
-          ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.house),
-            label: "Home",
-            backgroundColor: Colors.teal,
-          ),
-        ],
+        ),
       ),
     );
   }
