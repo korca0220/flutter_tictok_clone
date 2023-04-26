@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tictok_clone/constants/gaps.dart';
 import 'package:tictok_clone/constants/sizes.dart';
+import 'package:tictok_clone/features/videos/widgets/video_button.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class VideoPost extends StatefulWidget {
-  final Function onVideoFinished;
   final int index;
   const VideoPost({
     super.key,
-    required this.onVideoFinished,
     required this.index,
   });
 
@@ -22,18 +22,13 @@ class _VideoPostState extends State<VideoPost>
   final _videoController =
       VideoPlayerController.asset('assets/videos/video.mp4');
   final _animationDuration = const Duration(milliseconds: 200);
+  final _textKey = GlobalKey();
 
   late AnimationController _animationController;
 
   bool _isPaused = false;
-
-  void _onVideoChange() {
-    if (_videoController.value.isInitialized) {
-      if (_videoController.value.duration == _videoController.value.position) {
-        widget.onVideoFinished();
-      }
-    }
-  }
+  bool _isMoreText = false;
+  int? _contentLine = 1;
 
   void _onVisibilityChanged(VisibilityInfo info) {
     if (info.visibleFraction == 1 && !_videoController.value.isPlaying) {
@@ -43,7 +38,7 @@ class _VideoPostState extends State<VideoPost>
 
   void _initVideoPlayer() async {
     await _videoController.initialize();
-    _videoController.addListener(_onVideoChange);
+    await _videoController.setLooping(true);
     setState(() {});
   }
 
@@ -123,8 +118,95 @@ class _VideoPostState extends State<VideoPost>
               ),
             ),
           ),
+          Positioned(
+            bottom: 20,
+            left: 10,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  '@Junewoo',
+                  style: TextStyle(
+                    fontSize: Sizes.size20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Gaps.v10,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 200,
+                      child: Text(
+                        'This is my house in Korea lalalalalalal',
+                        maxLines: _isMoreText ? null : 1,
+                        style: const TextStyle(
+                          fontSize: Sizes.size16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    !_isMoreText
+                        ? GestureDetector(
+                            onTap: _onTapMoreText,
+                            child: const Text(
+                              '...See more',
+                              style: TextStyle(
+                                fontSize: Sizes.size16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink()
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 20,
+            right: 10,
+            child: Column(
+              children: const [
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  foregroundImage: NetworkImage(
+                    "https://avatars.githubusercontent.com/u/25660275?v=4",
+                  ),
+                  child: Text("준우"),
+                ),
+                Gaps.v24,
+                VideoButton(
+                  icon: FontAwesomeIcons.solidHeart,
+                  text: "2.9M",
+                ),
+                Gaps.v24,
+                VideoButton(
+                  icon: FontAwesomeIcons.solidComment,
+                  text: "3.9M",
+                ),
+                Gaps.v24,
+                VideoButton(
+                  icon: FontAwesomeIcons.share,
+                  text: "Share",
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  void _onTapMoreText() {
+    if (_isMoreText) {
+      _contentLine = null;
+    } else {
+      _contentLine = 1;
+    }
+    _isMoreText = !_isMoreText;
+    setState(() {});
   }
 }
