@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tictok_clone/constants/gaps.dart';
 import 'package:tictok_clone/constants/sizes.dart';
 import 'package:tictok_clone/features/videos/widgets/video_button.dart';
+import 'package:tictok_clone/features/videos/widgets/video_comments.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -31,7 +32,9 @@ class _VideoPostState extends State<VideoPost>
   int? _contentLine = 1;
 
   void _onVisibilityChanged(VisibilityInfo info) {
-    if (info.visibleFraction == 1 && !_videoController.value.isPlaying) {
+    if (info.visibleFraction == 1 &&
+        !_videoController.value.isPlaying &&
+        !_isPaused) {
       _videoController.play();
     }
   }
@@ -73,6 +76,28 @@ class _VideoPostState extends State<VideoPost>
   void dispose() {
     _videoController.dispose();
     super.dispose();
+  }
+
+  void _onTapMoreText() {
+    if (_isMoreText) {
+      _contentLine = null;
+    } else {
+      _contentLine = 1;
+    }
+    _isMoreText = !_isMoreText;
+    setState(() {});
+  }
+
+  void _onCommentTap(BuildContext context) async {
+    if (_videoController.value.isPlaying) {
+      _onTogglePause();
+    }
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => VideoComments(),
+    );
+    _onTogglePause();
   }
 
   @override
@@ -167,8 +192,8 @@ class _VideoPostState extends State<VideoPost>
             bottom: 20,
             right: 10,
             child: Column(
-              children: const [
-                CircleAvatar(
+              children: [
+                const CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
@@ -178,17 +203,20 @@ class _VideoPostState extends State<VideoPost>
                   child: Text("준우"),
                 ),
                 Gaps.v24,
-                VideoButton(
+                const VideoButton(
                   icon: FontAwesomeIcons.solidHeart,
                   text: "2.9M",
                 ),
                 Gaps.v24,
-                VideoButton(
-                  icon: FontAwesomeIcons.solidComment,
-                  text: "3.9M",
+                GestureDetector(
+                  onTap: () => _onCommentTap(context),
+                  child: VideoButton(
+                    icon: FontAwesomeIcons.solidComment,
+                    text: "3.9M",
+                  ),
                 ),
                 Gaps.v24,
-                VideoButton(
+                const VideoButton(
                   icon: FontAwesomeIcons.share,
                   text: "Share",
                 ),
@@ -198,15 +226,5 @@ class _VideoPostState extends State<VideoPost>
         ],
       ),
     );
-  }
-
-  void _onTapMoreText() {
-    if (_isMoreText) {
-      _contentLine = null;
-    } else {
-      _contentLine = 1;
-    }
-    _isMoreText = !_isMoreText;
-    setState(() {});
   }
 }
