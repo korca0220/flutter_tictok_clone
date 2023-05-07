@@ -136,14 +136,14 @@ class _VideoCommentsState extends State<VideoComments> {
                                 ),
                                 fillColor: Colors.grey.shade200,
                                 contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: Sizes.size12,
+                                  horizontal: Sizes.size20,
                                 ),
                                 suffixIcon: Padding(
                                   padding: const EdgeInsets.only(
                                     right: Sizes.size14,
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
                                       FaIcon(
                                         FontAwesomeIcons.at,
