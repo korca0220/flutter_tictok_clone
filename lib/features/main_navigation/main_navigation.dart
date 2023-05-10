@@ -60,7 +60,7 @@ class _MainNavigationState extends State<MainNavigation> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.black,
+        color: _currentIndex == 0 ? Colors.black : Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(Sizes.size12),
           child: Row(
@@ -72,6 +72,7 @@ class _MainNavigationState extends State<MainNavigation> {
                 text: 'Home',
                 isSelected: _currentIndex == 0,
                 onTap: () => _onTap(0),
+                selectedIndex: _currentIndex,
               ),
               NavTab(
                 icon: FontAwesomeIcons.compass,
@@ -79,11 +80,14 @@ class _MainNavigationState extends State<MainNavigation> {
                 text: 'Discover',
                 isSelected: _currentIndex == 1,
                 onTap: () => _onTap(1),
+                selectedIndex: _currentIndex,
               ),
               Gaps.h24,
               GestureDetector(
                 onTap: _onPostVideoButtonTap,
-                child: const PostVideoButton(),
+                child: PostVideoButton(
+                  inverted: _currentIndex != 0,
+                ),
               ),
               Gaps.h24,
               NavTab(
@@ -92,6 +96,7 @@ class _MainNavigationState extends State<MainNavigation> {
                 text: 'Inbox',
                 isSelected: _currentIndex == 3,
                 onTap: () => _onTap(3),
+                selectedIndex: _currentIndex,
               ),
               NavTab(
                 icon: FontAwesomeIcons.user,
@@ -99,6 +104,7 @@ class _MainNavigationState extends State<MainNavigation> {
                 text: 'Profile',
                 isSelected: _currentIndex == 4,
                 onTap: () => _onTap(4),
+                selectedIndex: _currentIndex,
               ),
             ],
           ),
