@@ -14,6 +14,7 @@ class VideoComments extends StatefulWidget {
 
 class _VideoCommentsState extends State<VideoComments> {
   bool _isWriting = false;
+  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,61 +43,65 @@ class _VideoCommentsState extends State<VideoComments> {
           onTap: _stopWriting,
           child: Stack(
             children: [
-              ListView.separated(
-                padding: const EdgeInsets.only(
-                  top: Sizes.size10,
-                  bottom: Sizes.size96 + Sizes.size20,
-                  right: Sizes.size16,
-                  left: Sizes.size16,
-                ),
-                itemCount: 10,
-                separatorBuilder: (context, index) => Gaps.v20,
-                itemBuilder: (context, index) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const CircleAvatar(
-                        radius: 18,
-                        child: Text('Hi'),
-                      ),
-                      Gaps.h10,
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              Scrollbar(
+                controller: _scrollController,
+                child: ListView.separated(
+                  controller: _scrollController,
+                  padding: const EdgeInsets.only(
+                    top: Sizes.size10,
+                    bottom: Sizes.size96,
+                    right: Sizes.size16,
+                    left: Sizes.size16,
+                  ),
+                  itemCount: 10,
+                  separatorBuilder: (context, index) => Gaps.v20,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const CircleAvatar(
+                          radius: 18,
+                          child: Text('Hi'),
+                        ),
+                        Gaps.h10,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Junewoo',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Sizes.size14,
+                                  color: Colors.grey.shade500,
+                                ),
+                              ),
+                              Gaps.v3,
+                              Text(
+                                  'Reloaded 0 libraries in 187ms (compile: 9 ms, reload: 0 ms, reassemble: 86 ms)'),
+                            ],
+                          ),
+                        ),
+                        Gaps.h10,
+                        Column(
                           children: [
+                            const FaIcon(
+                              FontAwesomeIcons.heart,
+                              size: Sizes.size20,
+                            ),
+                            Gaps.v2,
                             Text(
-                              'Junewoo',
+                              '52.2k',
                               style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: Sizes.size14,
                                 color: Colors.grey.shade500,
                               ),
                             ),
-                            Gaps.v3,
-                            Text(
-                                'Reloaded 0 libraries in 187ms (compile: 9 ms, reload: 0 ms, reassemble: 86 ms)'),
                           ],
-                        ),
-                      ),
-                      Gaps.h10,
-                      Column(
-                        children: [
-                          const FaIcon(
-                            FontAwesomeIcons.heart,
-                            size: Sizes.size20,
-                          ),
-                          Gaps.v2,
-                          Text(
-                            '52.2k',
-                            style: TextStyle(
-                              color: Colors.grey.shade500,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  );
-                },
+                        )
+                      ],
+                    );
+                  },
+                ),
               ),
               Positioned(
                 bottom: 0,
