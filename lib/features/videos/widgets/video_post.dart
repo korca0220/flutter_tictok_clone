@@ -23,7 +23,6 @@ class _VideoPostState extends State<VideoPost>
   final _videoController =
       VideoPlayerController.asset('assets/videos/video.mp4');
   final _animationDuration = const Duration(milliseconds: 200);
-  final _textKey = GlobalKey();
 
   late AnimationController _animationController;
 
@@ -99,7 +98,7 @@ class _VideoPostState extends State<VideoPost>
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => VideoComments(),
+      builder: (context) => const VideoComments(),
     );
     _onTogglePause();
   }
