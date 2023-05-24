@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tictok_clone/constants/gaps.dart';
@@ -13,19 +14,128 @@ final tabs = [
   "Brands",
 ];
 
-class DiscoverScreen extends StatelessWidget {
+class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
+
+  @override
+  State<DiscoverScreen> createState() => _DiscoverScreenState();
+}
+
+class _DiscoverScreenState extends State<DiscoverScreen>
+    with SingleTickerProviderStateMixin {
+  final _textEditingController = TextEditingController();
+  late TabController _tabController;
+
+  void _onSearchChanged(String value) {}
+
+  void _onSearchSubmitted(String value) {}
+
+  void _onTapClear() {
+    _textEditingController.clear();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _tabController = TabController(
+      length: tabs.length,
+      vsync: this,
+    );
+    _tabController.addListener(_tabEvent);
+    _textEditingController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    _tabController.removeListener(_tabEvent);
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  _tabEvent() {
+    if (_tabController.indexIsChanging ||
+        _tabController.animation!.value.round() == _tabController.index) {
+      FocusScope.of(context).unfocus();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 1,
-          title: const Text('Discover'),
+          title: Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: Sizes.size44,
+                  child: TextField(
+                    controller: _textEditingController,
+                    onChanged: _onSearchChanged,
+                    onSubmitted: _onSearchSubmitted,
+                    cursorColor: Theme.of(context).primaryColor,
+                    textAlignVertical: TextAlignVertical.center,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: Sizes.size16,
+                    ),
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: Sizes.size10),
+                        child: FaIcon(
+                          FontAwesomeIcons.magnifyingGlass,
+                          color: Colors.grey.shade700,
+                          size: Sizes.size16,
+                        ),
+                      ),
+                      prefixIconConstraints:
+                          const BoxConstraints(minWidth: 0, minHeight: 0),
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.only(
+                          right: Sizes.size10,
+                        ),
+                        child: _textEditingController.text.isNotEmpty
+                            ? GestureDetector(
+                                onTap: _onTapClear,
+                                child: FaIcon(
+                                  FontAwesomeIcons.solidCircleXmark,
+                                  color: Colors.grey.shade400,
+                                  size: Sizes.size20,
+                                ),
+                              )
+                            : null,
+                      ),
+                      suffixIconConstraints:
+                          const BoxConstraints(minWidth: 0, minHeight: 0),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(Sizes.size12),
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey.shade200,
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                ),
+              ),
+              Gaps.h10,
+              const FaIcon(
+                FontAwesomeIcons.sliders,
+                size: Sizes.size20,
+              )
+            ],
+          ),
           centerTitle: true,
           bottom: TabBar(
+            controller: _tabController,
             splashFactory: NoSplash.splashFactory,
             padding: const EdgeInsets.symmetric(horizontal: Sizes.size16),
             isScrollable: true,
@@ -45,8 +155,10 @@ class DiscoverScreen extends StatelessWidget {
           ),
         ),
         body: TabBarView(
+          controller: _tabController,
           children: [
             GridView.builder(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               padding: const EdgeInsets.symmetric(
                 horizontal: Sizes.size6,
                 vertical: Sizes.size6,
@@ -61,14 +173,19 @@ class DiscoverScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Column(
                   children: [
-                    AspectRatio(
-                      aspectRatio: 9 / 16,
-                      child: FadeInImage.assetNetwork(
-                        placeholder: 'assets/images/placeholder.jpeg',
-                        placeholderFit: BoxFit.cover,
-                        image:
-                            "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                        fit: BoxFit.cover,
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Sizes.size4),
+                      ),
+                      child: AspectRatio(
+                        aspectRatio: 9 / 16,
+                        child: FadeInImage.assetNetwork(
+                          placeholder: 'assets/images/placeholder.jpeg',
+                          placeholderFit: BoxFit.cover,
+                          image:
+                              "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     Gaps.v10,
