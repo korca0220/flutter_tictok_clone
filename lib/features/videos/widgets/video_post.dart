@@ -28,7 +28,6 @@ class _VideoPostState extends State<VideoPost>
 
   bool _isPaused = false;
   bool _isMoreText = false;
-  int? _contentLine = 1;
 
   void _onVisibilityChanged(VisibilityInfo info) {
     if (info.visibleFraction == 1 &&
@@ -82,10 +81,7 @@ class _VideoPostState extends State<VideoPost>
 
   void _onTapMoreText() {
     if (_isMoreText) {
-      _contentLine = null;
-    } else {
-      _contentLine = 1;
-    }
+    } else {}
     _isMoreText = !_isMoreText;
     setState(() {});
   }
