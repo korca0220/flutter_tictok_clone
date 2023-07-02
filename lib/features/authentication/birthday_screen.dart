@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tictok_clone/constants/gaps.dart';
-import 'package:tictok_clone/constants/sizes.dart';
-import 'package:tictok_clone/features/authentication/widgets/form_button.dart';
-import 'package:tictok_clone/features/onboading/interests_screen.dart';
+
+import '../../constants/gaps.dart';
+import '../../constants/sizes.dart';
+import '../onboading/interests_screen.dart';
+import 'widgets/form_button.dart';
 
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({super.key});
@@ -40,7 +41,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   }
 
   void _setTextFieldDate(DateTime date) {
-    final textDate = date.toString().split(" ").first;
+    final textDate = date.toString().split(' ').first;
     _birthdayController.value = TextEditingValue(text: textDate);
   }
 

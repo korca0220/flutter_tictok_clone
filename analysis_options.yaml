@@ -21,9 +21,17 @@ linter:
   # or a specific dart file by using the `// ignore: name_of_lint` and
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
-  rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+  rules:      
+    lines_longer_than_80_chars: false
+    avoid_print: true
+    prefer_single_quotes: true
+    prefer_relative_imports: true
+    curly_braces_in_flow_control_structures: false
+    avoid_empty_else: true
+
+    # 잘 그럴 일은 없지만
+    avoid_types_as_parameter_names: true
+    require_trailing_commas: true
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options

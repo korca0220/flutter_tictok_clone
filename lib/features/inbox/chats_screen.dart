@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tictok_clone/constants/sizes.dart';
+
+import '../../constants/sizes.dart';
 
 class ChatsScreen extends StatefulWidget {
   const ChatsScreen({super.key});
@@ -20,29 +20,30 @@ class _ChatsScreenState extends State<ChatsScreen> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: FaIcon(
+            icon: const FaIcon(
               FontAwesomeIcons.plus,
             ),
           )
         ],
       ),
       body: ListView(
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           vertical: Sizes.size10,
         ),
         children: [
           ListTile(
-            leading: CircleAvatar(
+            leading: const CircleAvatar(
               radius: 30,
-              child: Text('Ju'),
               foregroundImage: NetworkImage(
-                  'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'),
+                'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+              ),
+              child: Text('Ju'),
             ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(
+                const Text(
                   'Lynn',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
@@ -57,7 +58,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
                 ),
               ],
             ),
-            subtitle: Text(
+            subtitle: const Text(
               'Don\'t forget to make video?',
             ),
           )
