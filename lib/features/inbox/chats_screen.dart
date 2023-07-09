@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../constants/sizes.dart';
+import 'chat_detail_screen.dart';
 
 class ChatsScreen extends StatefulWidget {
   const ChatsScreen({super.key});
@@ -15,16 +16,76 @@ class _ChatsScreenState extends State<ChatsScreen> {
 
   final List<int> _items = [];
 
+  final Duration _duration = const Duration(milliseconds: 300);
+
   _addItem() {
     if (_key.currentState != null) {
       _key.currentState!.insertItem(
         _items.length,
-        duration: const Duration(
-          milliseconds: 300,
-        ),
+        duration: _duration,
       );
       _items.add(_items.length);
     }
+  }
+
+  _deleteItem(int index) {
+    if (_key.currentState != null) {
+      _key.currentState!.removeItem(
+        index,
+        (context, animation) => SizeTransition(
+          sizeFactor: animation,
+          child: Container(
+            color: Colors.red,
+            child: _makeTile(index),
+          ),
+        ),
+        duration: _duration,
+      );
+    }
+  }
+
+  _makeTile(int index) {
+    return ListTile(
+      onLongPress: () => _deleteItem(index),
+      onTap: _onChatTap,
+      leading: const CircleAvatar(
+        radius: 30,
+        foregroundImage: NetworkImage(
+          'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+        ),
+        child: Text('Ju'),
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            'Lynn ($index)',
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Text(
+            '2:16 PM',
+            style: TextStyle(
+              color: Colors.grey.shade500,
+              fontSize: Sizes.size12,
+            ),
+          ),
+        ],
+      ),
+      subtitle: const Text(
+        'Don\'t forget to make video?',
+      ),
+    );
+  }
+
+  void _onChatTap() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const ChatDetailScreen(),
+      ),
+    );
   }
 
   @override
@@ -54,37 +115,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
             key: UniqueKey(),
             child: SizeTransition(
               sizeFactor: animation,
-              child: ListTile(
-                leading: const CircleAvatar(
-                  radius: 30,
-                  foregroundImage: NetworkImage(
-                    'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-                  ),
-                  child: Text('Ju'),
-                ),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Lynn ($index)',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      '2:16 PM',
-                      style: TextStyle(
-                        color: Colors.grey.shade500,
-                        fontSize: Sizes.size12,
-                      ),
-                    ),
-                  ],
-                ),
-                subtitle: const Text(
-                  'Don\'t forget to make video?',
-                ),
-              ),
+              child: _makeTile(index),
             ),
           );
         },
