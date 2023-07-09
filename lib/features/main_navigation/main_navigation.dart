@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tictok_clone/constants/gaps.dart';
-import 'package:tictok_clone/constants/sizes.dart';
-import 'package:tictok_clone/features/discover/discover_screen.dart';
-import 'package:tictok_clone/features/inbox/inbox_screen.dart';
-import 'package:tictok_clone/features/main_navigation/widgets/nav_tab.dart';
-import 'package:tictok_clone/features/main_navigation/widgets/post_video_button.dart';
-import 'package:tictok_clone/features/videos/videos_timeline_screen.dart';
+
+import '../../constants/gaps.dart';
+import '../../constants/sizes.dart';
+import '../discover/discover_screen.dart';
+import '../inbox/inbox_screen.dart';
+import '../users/user_profile_screen.dart';
+import '../videos/videos_timeline_screen.dart';
+import 'widgets/nav_tab.dart';
+import 'widgets/post_video_button.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -16,7 +18,7 @@ class MainNavigation extends StatefulWidget {
 }
 
 class _MainNavigationState extends State<MainNavigation> {
-  int _currentIndex = 3;
+  int _currentIndex = 4;
 
   void _onTap(int index) {
     setState(() {
@@ -25,14 +27,16 @@ class _MainNavigationState extends State<MainNavigation> {
   }
 
   void _onPostVideoButtonTap() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          title: Text('Record Video'),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: const Text('Record Video'),
+          ),
         ),
+        fullscreenDialog: true,
       ),
-      fullscreenDialog: true,
-    ));
+    );
   }
 
   @override
@@ -56,7 +60,7 @@ class _MainNavigationState extends State<MainNavigation> {
           ),
           Offstage(
             offstage: _currentIndex != 4,
-            child: Container(),
+            child: const UserProfileScreen(),
           ),
         ],
       ),
