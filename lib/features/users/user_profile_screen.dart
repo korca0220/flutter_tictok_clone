@@ -42,6 +42,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       Gaps.v20,
                       const CircleAvatar(
                         radius: 50,
+                        foregroundImage: NetworkImage(
+                            'https://avatars.githubusercontent.com/u/25660275?v=4'),
                       ),
                       Gaps.v20,
                       Row(
@@ -182,7 +184,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ),
                           Gaps.h4,
                           Text(
-                            'https://nomadcoders.co',
+                            'https://naver.com',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
