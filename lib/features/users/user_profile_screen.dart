@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
+import '../settings/settings_screen.dart';
 import 'widgets/persistent_tab_bar.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -13,6 +14,14 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
+  _onGearPressed() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SettingsScreen(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +37,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   title: const Text('Junewoo'),
                   actions: [
                     IconButton(
-                      onPressed: () {},
+                      onPressed: _onGearPressed,
                       icon: const FaIcon(
                         FontAwesomeIcons.gear,
                         size: Sizes.size20,

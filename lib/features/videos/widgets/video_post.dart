@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tictok_clone/constants/gaps.dart';
-import 'package:tictok_clone/constants/sizes.dart';
-import 'package:tictok_clone/features/videos/widgets/video_button.dart';
-import 'package:tictok_clone/features/videos/widgets/video_comments.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+
+import '../../../constants/gaps.dart';
+import '../../../constants/sizes.dart';
+import 'video_button.dart';
+import 'video_comments.dart';
 
 class VideoPost extends StatefulWidget {
   final int index;
@@ -30,6 +31,7 @@ class _VideoPostState extends State<VideoPost>
   bool _isMoreText = false;
 
   void _onVisibilityChanged(VisibilityInfo info) {
+    if (!mounted) return;
     if (info.visibleFraction == 1 &&
         !_videoController.value.isPlaying &&
         !_isPaused) {
@@ -197,27 +199,27 @@ class _VideoPostState extends State<VideoPost>
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   foregroundImage: NetworkImage(
-                    "https://avatars.githubusercontent.com/u/25660275?v=4",
+                    'https://avatars.githubusercontent.com/u/25660275?v=4',
                   ),
-                  child: Text("준우"),
+                  child: Text('준우'),
                 ),
                 Gaps.v24,
                 const VideoButton(
                   icon: FontAwesomeIcons.solidHeart,
-                  text: "2.9M",
+                  text: '2.9M',
                 ),
                 Gaps.v24,
                 GestureDetector(
                   onTap: () => _onCommentTap(context),
-                  child: VideoButton(
+                  child: const VideoButton(
                     icon: FontAwesomeIcons.solidComment,
-                    text: "3.9M",
+                    text: '3.9M',
                   ),
                 ),
                 Gaps.v24,
                 const VideoButton(
                   icon: FontAwesomeIcons.share,
-                  text: "Share",
+                  text: 'Share',
                 ),
               ],
             ),
