@@ -43,7 +43,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       const CircleAvatar(
                         radius: 50,
                         foregroundImage: NetworkImage(
-                            'https://avatars.githubusercontent.com/u/25660275?v=4'),
+                          'https://avatars.githubusercontent.com/u/25660275?v=4',
+                        ),
                       ),
                       Gaps.v20,
                       Row(
