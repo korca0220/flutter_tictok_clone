@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -73,6 +74,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }
             },
             title: const Text('What is your birthday?'),
+          ),
+          ListTile(
+            title: const Text('Log out'),
+            textColor: Colors.red,
+            onTap: () {
+              showCupertinoDialog(
+                context: context,
+                builder: (context) => CupertinoAlertDialog(
+                  title: const Text('are your sure?'),
+                  content: const Text('Plx dont go'),
+                  actions: [
+                    CupertinoDialogAction(
+                      child: const Text('No'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                    CupertinoDialogAction(
+                      isDestructiveAction: true,
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Yes'),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
           const AboutListTile(),
         ],
