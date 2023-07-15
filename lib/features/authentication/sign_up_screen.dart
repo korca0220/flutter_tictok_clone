@@ -1,25 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tictok_clone/constants/gaps.dart';
-import 'package:tictok_clone/constants/sizes.dart';
-import 'package:tictok_clone/features/authentication/login_screen.dart';
-import 'package:tictok_clone/features/authentication/username_screen.dart';
-import 'package:tictok_clone/features/authentication/widgets/auth_button.dart';
+
+import '../../constants/gaps.dart';
+import '../../constants/sizes.dart';
+import 'login_screen.dart';
+import 'username_screen.dart';
+import 'widgets/auth_button.dart';
 
 void _onLoginTap(BuildContext context) {
-  Navigator.of(context).push(MaterialPageRoute(
-    builder: (context) {
-      return const LoginScreen();
-    },
-  ));
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) {
+        return const LoginScreen();
+      },
+    ),
+  );
 }
 
 void _onEmailTap(BuildContext context) {
-  Navigator.push(context, MaterialPageRoute(
-    builder: (context) {
-      return const UsernameScreen();
-    },
-  ));
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) {
+        return const UsernameScreen();
+      },
+    ),
+  );
 }
 
 class SignUpScreen extends StatelessWidget {
@@ -44,13 +50,15 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               Gaps.v20,
-              const Text(
-                'Create a profile, follow other accounts, make your own videos, and more.',
-                style: TextStyle(
-                  fontSize: Sizes.size16,
-                  color: Colors.black45,
+              const Opacity(
+                opacity: 0.7,
+                child: Text(
+                  'Create a profile, follow other accounts, make your own videos, and more.',
+                  style: TextStyle(
+                    fontSize: Sizes.size16,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
               Gaps.v40,
               AuthButton(
@@ -82,7 +90,6 @@ class SignUpScreen extends StatelessWidget {
       ),
       bottomNavigationBar: BottomAppBar(
         elevation: 1,
-        color: Colors.grey.shade50,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: Sizes.size32),
           child: Row(
