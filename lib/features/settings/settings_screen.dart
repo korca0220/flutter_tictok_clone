@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -10,8 +12,49 @@ class SettingsScreen extends StatelessWidget {
         title: const Text('Settings'),
       ),
       body: ListView(
-        children: const [
-          AboutListTile(),
+        children: [
+          ListTile(
+            onTap: () async {
+              final date = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1980),
+                lastDate: DateTime(2030),
+              );
+
+              print(date);
+
+              if (context.mounted) {
+                final time = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                print(time);
+              }
+
+              if (context.mounted) {
+                final booking = await showDateRangePicker(
+                  context: context,
+                  firstDate: DateTime(1980),
+                  lastDate: DateTime(2000),
+                  builder: (context, child) {
+                    return Theme(
+                      data: ThemeData(
+                        appBarTheme: const AppBarTheme(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.black,
+                        ),
+                      ),
+                      child: child!,
+                    );
+                  },
+                );
+                print(booking);
+              }
+            },
+            title: const Text('What is your birthday?'),
+          ),
+          const AboutListTile(),
         ],
       ),
     );
