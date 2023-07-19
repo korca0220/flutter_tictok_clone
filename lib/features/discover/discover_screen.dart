@@ -1,17 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tictok_clone/constants/gaps.dart';
-import 'package:tictok_clone/constants/sizes.dart';
+
+import '../../constants/gaps.dart';
+import '../../constants/sizes.dart';
+import '../../utils.dart';
 
 final tabs = [
-  "Top",
-  "Users",
-  "Videos",
-  "Sounds",
-  "LIVE",
-  "Shopping",
-  "Brands",
+  'Top',
+  'Users',
+  'Videos',
+  'Sounds',
+  'LIVE',
+  'Shopping',
+  'Brands',
 ];
 
 class DiscoverScreen extends StatefulWidget {
@@ -80,19 +81,22 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     controller: _textEditingController,
                     onChanged: _onSearchChanged,
                     onSubmitted: _onSearchSubmitted,
-                    cursorColor: Theme.of(context).primaryColor,
                     textAlignVertical: TextAlignVertical.center,
                     maxLines: 1,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: Sizes.size16,
+                      color: isDarkMode(context) ? Colors.white : Colors.black,
                     ),
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: Sizes.size10),
+                          horizontal: Sizes.size10,
+                        ),
                         child: FaIcon(
                           FontAwesomeIcons.magnifyingGlass,
-                          color: Colors.grey.shade700,
+                          color: isDarkMode(context)
+                              ? Colors.grey.shade200
+                              : Colors.grey.shade800,
                           size: Sizes.size16,
                         ),
                       ),
@@ -107,7 +111,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                                 onTap: _onTapClear,
                                 child: FaIcon(
                                   FontAwesomeIcons.solidCircleXmark,
-                                  color: Colors.grey.shade400,
+                                  color: isDarkMode(context)
+                                      ? Colors.grey.shade200
+                                      : Colors.grey.shade800,
                                   size: Sizes.size20,
                                 ),
                               )
@@ -120,7 +126,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                         borderRadius: BorderRadius.circular(Sizes.size12),
                       ),
                       filled: true,
-                      fillColor: Colors.grey.shade200,
+                      fillColor: isDarkMode(context)
+                          ? Colors.grey.shade800
+                          : Colors.grey.shade200,
                       contentPadding: EdgeInsets.zero,
                     ),
                   ),
@@ -139,13 +147,11 @@ class _DiscoverScreenState extends State<DiscoverScreen>
             splashFactory: NoSplash.splashFactory,
             padding: const EdgeInsets.symmetric(horizontal: Sizes.size16),
             isScrollable: true,
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.grey.shade500,
-            indicatorColor: Colors.black,
             labelStyle: const TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: Sizes.size16,
             ),
+            indicatorColor: Theme.of(context).tabBarTheme.indicatorColor,
             tabs: [
               for (var tab in tabs)
                 Tab(
@@ -183,14 +189,14 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                           placeholder: 'assets/images/placeholder.jpeg',
                           placeholderFit: BoxFit.cover,
                           image:
-                              "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                              'https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
                     Gaps.v10,
                     const Text(
-                      "This is a very long caption for my tiktok that im upload just now currently,",
+                      'This is a very long caption for my tiktok that im upload just now currently,',
                       style: TextStyle(
                         fontSize: Sizes.size16,
                         fontWeight: FontWeight.bold,
@@ -201,7 +207,9 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                     Gaps.v5,
                     DefaultTextStyle(
                       style: TextStyle(
-                        color: Colors.grey.shade500,
+                        color: isDarkMode(context)
+                            ? Colors.grey.shade300
+                            : Colors.grey.shade600,
                         fontWeight: FontWeight.w600,
                       ),
                       child: Row(
@@ -209,7 +217,8 @@ class _DiscoverScreenState extends State<DiscoverScreen>
                           const CircleAvatar(
                             radius: 12,
                             backgroundImage: NetworkImage(
-                                'https://avatars.githubusercontent.com/u/25660275?v=4'),
+                              'https://avatars.githubusercontent.com/u/25660275?v=4',
+                            ),
                           ),
                           Gaps.h4,
                           const Expanded(

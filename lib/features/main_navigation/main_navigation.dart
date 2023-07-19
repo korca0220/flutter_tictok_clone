@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
+import '../../utils.dart';
 import '../discover/discover_screen.dart';
 import '../inbox/inbox_screen.dart';
 import '../users/user_profile_screen.dart';
@@ -41,6 +42,8 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.black,
@@ -65,7 +68,7 @@ class _MainNavigationState extends State<MainNavigation> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: _currentIndex == 0 ? Colors.black : Colors.white,
+        color: _currentIndex == 0 || isDark ? Colors.black : Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(Sizes.size12),
           child: Row(
