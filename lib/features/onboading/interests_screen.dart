@@ -1,49 +1,50 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tictok_clone/constants/gaps.dart';
-import 'package:tictok_clone/constants/sizes.dart';
-import 'package:tictok_clone/features/onboading/tutorial_screen.dart';
-import 'package:tictok_clone/features/onboading/widgets/interest_button.dart';
+
+import '../../constants/gaps.dart';
+import '../../constants/sizes.dart';
+import 'tutorial_screen.dart';
+import 'widgets/interest_button.dart';
 
 const interests = [
-  "Daily Life",
-  "Comedy",
-  "Entertainment",
-  "Animals",
-  "Food",
-  "Beauty & Style",
-  "Drama",
-  "Learning",
-  "Talent",
-  "Sports",
-  "Auto",
-  "Family",
-  "Fitness & Health",
-  "DIY & Life Hacks",
-  "Arts & Crafts",
-  "Dance",
-  "Outdoors",
-  "Oddly Satisfying",
-  "Home & Garden",
-  "Daily Life",
-  "Comedy",
-  "Entertainment",
-  "Animals",
-  "Food",
-  "Beauty & Style",
-  "Drama",
-  "Learning",
-  "Talent",
-  "Sports",
-  "Auto",
-  "Family",
-  "Fitness & Health",
-  "DIY & Life Hacks",
-  "Arts & Crafts",
-  "Dance",
-  "Outdoors",
-  "Oddly Satisfying",
-  "Home & Garden",
+  'Daily Life',
+  'Comedy',
+  'Entertainment',
+  'Animals',
+  'Food',
+  'Beauty & Style',
+  'Drama',
+  'Learning',
+  'Talent',
+  'Sports',
+  'Auto',
+  'Family',
+  'Fitness & Health',
+  'DIY & Life Hacks',
+  'Arts & Crafts',
+  'Dance',
+  'Outdoors',
+  'Oddly Satisfying',
+  'Home & Garden',
+  'Daily Life',
+  'Comedy',
+  'Entertainment',
+  'Animals',
+  'Food',
+  'Beauty & Style',
+  'Drama',
+  'Learning',
+  'Talent',
+  'Sports',
+  'Auto',
+  'Family',
+  'Fitness & Health',
+  'DIY & Life Hacks',
+  'Arts & Crafts',
+  'Dance',
+  'Outdoors',
+  'Oddly Satisfying',
+  'Home & Garden',
 ];
 
 class InterestsScreen extends StatefulWidget {
@@ -85,10 +86,11 @@ class _InterestsScreenState extends State<InterestsScreen> {
 
   void _onNextTap() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const TutorialScreen(),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) => const TutorialScreen(),
+      ),
+    );
   }
 
   @override

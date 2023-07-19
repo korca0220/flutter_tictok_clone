@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tictok_clone/constants/gaps.dart';
-import 'package:tictok_clone/constants/sizes.dart';
-import 'package:tictok_clone/features/main_navigation/main_navigation.dart';
+
+import '../../constants/gaps.dart';
+import '../../constants/sizes.dart';
+import '../../utils.dart';
+import '../main_navigation/main_navigation.dart';
 
 enum Direction { right, left }
 
@@ -65,9 +67,9 @@ class _TutorialScreenState extends State<TutorialScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: Sizes.size24),
             child: AnimatedCrossFade(
-              firstChild: Column(
+              firstChild: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Gaps.v80,
                   Text(
                     'Watch cool video!',
@@ -80,14 +82,14 @@ class _TutorialScreenState extends State<TutorialScreen> {
                   Text(
                     'Videos are personalized for you based on what you watch, like, and share.',
                     style: TextStyle(
-                      fontSize: Sizes.size20,
+                      fontSize: Sizes.size18,
                     ),
                   )
                 ],
               ),
-              secondChild: Column(
+              secondChild: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Gaps.v80,
                   Text(
                     'Follow the rules!',
@@ -113,9 +115,12 @@ class _TutorialScreenState extends State<TutorialScreen> {
           ),
         ),
         bottomNavigationBar: BottomAppBar(
+          color: isDarkMode(context) ? Colors.black : Colors.white,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-                vertical: Sizes.size24, horizontal: Sizes.size24),
+              vertical: Sizes.size24,
+              horizontal: Sizes.size24,
+            ),
             child: AnimatedOpacity(
               duration: const Duration(milliseconds: 300),
               opacity: _page == Page.first ? 0 : 1,
