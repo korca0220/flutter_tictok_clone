@@ -21,7 +21,8 @@ _onEmailLoginTap(BuildContext context) {
 }
 
 class LoginScreen extends StatelessWidget {
-  static const routerName = '/login';
+  static const routeURL = '/login';
+  static const routeName = 'login';
   const LoginScreen({super.key});
 
   @override

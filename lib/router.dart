@@ -4,34 +4,32 @@ import 'features/authentication/email_screen.dart';
 import 'features/authentication/login_screen.dart';
 import 'features/authentication/sign_up_screen.dart';
 import 'features/authentication/username_screen.dart';
-import 'features/users/user_profile_screen.dart';
 
 final router = GoRouter(
   routes: [
     GoRoute(
-      path: SignUpScreen.routerName,
+      path: SignUpScreen.routeURL,
+      name: SignUpScreen.routeName,
       builder: (context, state) => const SignUpScreen(),
+      routes: [
+        GoRoute(
+          path: UsernameScreen.routeURL,
+          name: UsernameScreen.routeName,
+          builder: (context, state) => const UsernameScreen(),
+          routes: [
+            GoRoute(
+              path: EmailScreen.routeURL,
+              name: EmailScreen.routeName,
+              builder: (context, state) => const EmailScreen(),
+            ),
+          ],
+        ),
+      ],
     ),
     GoRoute(
-      path: LoginScreen.routerName,
+      path: LoginScreen.routeURL,
+      name: LoginScreen.routeName,
       builder: (context, state) => const LoginScreen(),
-    ),
-    GoRoute(
-      path: UsernameScreen.routerName,
-      builder: (context, state) => const UsernameScreen(),
-    ),
-    GoRoute(
-      path: EmailScreen.routerName,
-      builder: (context, state) => const EmailScreen(),
-    ),
-    GoRoute(
-      path: '/users/:username',
-      builder: (context, state) {
-        final username = state.pathParameters['username'];
-        return UserProfileScreen(
-          username: username!,
-        );
-      },
     ),
   ],
 );

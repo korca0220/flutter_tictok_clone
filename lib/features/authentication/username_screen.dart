@@ -6,7 +6,8 @@ import 'email_screen.dart';
 import 'widgets/form_button.dart';
 
 class UsernameScreen extends StatefulWidget {
-  static const routerName = '/user_name';
+  static const routeURL = 'username';
+  static const routeName = 'userName';
   const UsernameScreen({super.key});
 
   @override

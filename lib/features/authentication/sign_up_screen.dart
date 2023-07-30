@@ -9,15 +9,16 @@ import 'username_screen.dart';
 import 'widgets/auth_button.dart';
 
 void _onLoginTap(BuildContext context) {
-  context.push(LoginScreen.routerName);
+  context.pushNamed(LoginScreen.routeName);
 }
 
 void _onEmailTap(BuildContext context) {
-  context.push(UsernameScreen.routerName);
+  context.pushNamed(UsernameScreen.routeName);
 }
 
 class SignUpScreen extends StatelessWidget {
-  static const routerName = '/';
+  static const routeURL = '/';
+  static const routeName = 'signup';
   const SignUpScreen({super.key});
 
   @override
