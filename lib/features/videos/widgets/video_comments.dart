@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tictok_clone/constants/gaps.dart';
-import 'package:tictok_clone/constants/sizes.dart';
+
+import '../../../constants/gaps.dart';
+import '../../../constants/sizes.dart';
+import '../../../utils.dart';
 
 class VideoComments extends StatefulWidget {
   const VideoComments({super.key});
@@ -16,7 +18,9 @@ class _VideoCommentsState extends State<VideoComments> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
+    final isDark = isDarkMode(context);
+
     return Container(
       height: size.height * 0.8,
       clipBehavior: Clip.hardEdge,
@@ -24,10 +28,10 @@ class _VideoCommentsState extends State<VideoComments> {
         borderRadius: BorderRadius.circular(Sizes.size14),
       ),
       child: Scaffold(
-        backgroundColor: Colors.grey.shade50,
+        backgroundColor: isDark ? null : Colors.grey.shade50,
         appBar: AppBar(
-          backgroundColor: Colors.grey.shade50,
-          title: Text('22212 comments'),
+          backgroundColor: isDark ? null : Colors.grey.shade50,
+          title: const Text('22212 comments'),
           centerTitle: true,
           automaticallyImplyLeading: false,
           actions: [
@@ -57,9 +61,10 @@ class _VideoCommentsState extends State<VideoComments> {
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 18,
-                          child: Text('Hi'),
+                          backgroundColor: isDark ? Colors.grey.shade500 : null,
+                          child: const Text('Hi'),
                         ),
                         Gaps.h10,
                         Expanded(
@@ -75,8 +80,9 @@ class _VideoCommentsState extends State<VideoComments> {
                                 ),
                               ),
                               Gaps.v3,
-                              Text(
-                                  'Reloaded 0 libraries in 187ms (compile: 9 ms, reload: 0 ms, reassemble: 86 ms)'),
+                              const Text(
+                                'Reloaded 0 libraries in 187ms (compile: 9 ms, reload: 0 ms, reassemble: 86 ms)',
+                              ),
                             ],
                           ),
                         ),
@@ -105,7 +111,6 @@ class _VideoCommentsState extends State<VideoComments> {
                 bottom: 0,
                 width: size.width,
                 child: BottomAppBar(
-                  color: Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: Sizes.size16,
@@ -117,7 +122,7 @@ class _VideoCommentsState extends State<VideoComments> {
                           radius: 18,
                           backgroundColor: Colors.grey.shade500,
                           foregroundColor: Colors.white,
-                          child: Text('hi'),
+                          child: const Text('hi'),
                         ),
                         Gaps.h10,
                         Expanded(
@@ -131,13 +136,15 @@ class _VideoCommentsState extends State<VideoComments> {
                               textInputAction: TextInputAction.newline,
                               decoration: InputDecoration(
                                 filled: true,
-                                hintText: "Write a comment... ",
+                                hintText: 'Write a comment... ',
                                 border: OutlineInputBorder(
                                   borderRadius:
                                       BorderRadius.circular(Sizes.size12),
                                   borderSide: BorderSide.none,
                                 ),
-                                fillColor: Colors.grey.shade200,
+                                fillColor: isDark
+                                    ? Colors.grey.shade800
+                                    : Colors.grey.shade200,
                                 contentPadding: const EdgeInsets.symmetric(
                                   horizontal: Sizes.size20,
                                 ),
@@ -151,19 +158,25 @@ class _VideoCommentsState extends State<VideoComments> {
                                       FaIcon(
                                         FontAwesomeIcons.at,
                                         size: Sizes.size20,
-                                        color: Colors.grey.shade900,
+                                        color: isDark
+                                            ? Colors.grey.shade500
+                                            : Colors.grey.shade900,
                                       ),
                                       Gaps.h14,
                                       FaIcon(
                                         FontAwesomeIcons.gift,
                                         size: Sizes.size20,
-                                        color: Colors.grey.shade900,
+                                        color: isDark
+                                            ? Colors.grey.shade500
+                                            : Colors.grey.shade900,
                                       ),
                                       Gaps.h14,
                                       FaIcon(
                                         FontAwesomeIcons.faceSmile,
                                         size: Sizes.size20,
-                                        color: Colors.grey.shade900,
+                                        color: isDark
+                                            ? Colors.grey.shade500
+                                            : Colors.grey.shade900,
                                       ),
                                       if (_isWriting) ...{
                                         Gaps.h14,

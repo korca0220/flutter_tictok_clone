@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tictok_clone/constants/gaps.dart';
-import 'package:tictok_clone/constants/sizes.dart';
+
+import '../../constants/gaps.dart';
+import '../../constants/sizes.dart';
+import '../../utils.dart';
 
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});
@@ -21,28 +23,28 @@ class _ActivityScreenState extends State<ActivityScreen>
 
   final List<Map<String, dynamic>> _tabs = [
     {
-      "title": "All activity",
-      "icon": FontAwesomeIcons.solidMessage,
+      'title': 'All activity',
+      'icon': FontAwesomeIcons.solidMessage,
     },
     {
-      "title": "Likes",
-      "icon": FontAwesomeIcons.solidHeart,
+      'title': 'Likes',
+      'icon': FontAwesomeIcons.solidHeart,
     },
     {
-      "title": "Comments",
-      "icon": FontAwesomeIcons.solidComments,
+      'title': 'Comments',
+      'icon': FontAwesomeIcons.solidComments,
     },
     {
-      "title": "Mentions",
-      "icon": FontAwesomeIcons.at,
+      'title': 'Mentions',
+      'icon': FontAwesomeIcons.at,
     },
     {
-      "title": "Followers",
-      "icon": FontAwesomeIcons.solidUser,
+      'title': 'Followers',
+      'icon': FontAwesomeIcons.solidUser,
     },
     {
-      "title": "From TikTok",
-      "icon": FontAwesomeIcons.tiktok,
+      'title': 'From TikTok',
+      'icon': FontAwesomeIcons.tiktok,
     }
   ];
 
@@ -82,165 +84,170 @@ class _ActivityScreenState extends State<ActivityScreen>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
+
     return Scaffold(
-        appBar: AppBar(
-          title: GestureDetector(
-            onTap: _toggleAnimation,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('All Activity'),
-                Gaps.h2,
-                RotationTransition(
-                  turns: _titleAnimation,
-                  child: const FaIcon(
-                    FontAwesomeIcons.chevronDown,
-                    size: Sizes.size14,
+      appBar: AppBar(
+        title: GestureDetector(
+          onTap: _toggleAnimation,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('All Activity'),
+              Gaps.h2,
+              RotationTransition(
+                turns: _titleAnimation,
+                child: const FaIcon(
+                  FontAwesomeIcons.chevronDown,
+                  size: Sizes.size14,
+                ),
+              ),
+            ],
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: Stack(
+        children: [
+          ListView(
+            children: [
+              Gaps.v14,
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.size12,
+                ),
+                child: Text(
+                  'New',
+                  style: TextStyle(
+                    fontSize: Sizes.size14,
+                    color: Colors.grey.shade500,
                   ),
                 ),
-              ],
+              ),
+              Gaps.v14,
+              for (var notification in _notifications)
+                Dismissible(
+                  key: Key(notification),
+                  onDismissed: (_) => onDismissed(notification),
+                  background: Container(
+                    color: Colors.green,
+                    alignment: Alignment.centerLeft,
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: Sizes.size10),
+                      child: FaIcon(
+                        FontAwesomeIcons.checkDouble,
+                        color: Colors.white,
+                        size: Sizes.size32,
+                      ),
+                    ),
+                  ),
+                  secondaryBackground: Container(
+                    color: Colors.red,
+                    alignment: Alignment.centerRight,
+                    child: const Padding(
+                      padding: EdgeInsets.only(right: Sizes.size10),
+                      child: FaIcon(
+                        FontAwesomeIcons.trashCan,
+                        color: Colors.white,
+                        size: Sizes.size32,
+                      ),
+                    ),
+                  ),
+                  child: ListTile(
+                    minVerticalPadding: Sizes.size16,
+                    leading: Container(
+                      width: Sizes.size52,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: isDark ? Colors.grey.shade800 : Colors.white,
+                        border: Border.all(
+                          color: isDark
+                              ? Colors.grey.shade800
+                              : Colors.grey.shade400,
+                          width: 1,
+                        ),
+                      ),
+                      child: const Center(
+                        child: FaIcon(
+                          FontAwesomeIcons.bell,
+                        ),
+                      ),
+                    ),
+                    title: RichText(
+                      text: TextSpan(
+                        text: 'Account updates:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: Sizes.size16,
+                          color: isDark ? null : Colors.black,
+                        ),
+                        children: [
+                          const TextSpan(
+                            text: ' Upload longer videos',
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                          TextSpan(
+                            text: ' ${notification}h',
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    trailing: const FaIcon(
+                      FontAwesomeIcons.chevronRight,
+                      size: Sizes.size20,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          if (_showBarrier)
+            AnimatedModalBarrier(
+              color: _barrierAnimation,
+              dismissible: true,
+              onDismiss: _toggleAnimation,
+            ),
+          SlideTransition(
+            position: _panelAnimation,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).appBarTheme.backgroundColor,
+                borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.circular(Sizes.size4),
+                  bottomLeft: Radius.circular(Sizes.size4),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (var tab in _tabs)
+                    ListTile(
+                      title: Row(
+                        children: [
+                          Icon(
+                            tab['icon'],
+                            size: Sizes.size16,
+                          ),
+                          Gaps.h20,
+                          Text(
+                            tab['title'],
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    )
+                ],
+              ),
             ),
           ),
-          centerTitle: true,
-        ),
-        body: Stack(
-          children: [
-            ListView(
-              children: [
-                Gaps.v14,
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: Sizes.size12,
-                  ),
-                  child: Text(
-                    'New',
-                    style: TextStyle(
-                      fontSize: Sizes.size14,
-                      color: Colors.grey.shade500,
-                    ),
-                  ),
-                ),
-                Gaps.v14,
-                for (var notification in _notifications)
-                  Dismissible(
-                    key: Key(notification),
-                    onDismissed: (_) => onDismissed(notification),
-                    background: Container(
-                      color: Colors.green,
-                      alignment: Alignment.centerLeft,
-                      child: const Padding(
-                        padding: EdgeInsets.only(left: Sizes.size10),
-                        child: FaIcon(
-                          FontAwesomeIcons.checkDouble,
-                          color: Colors.white,
-                          size: Sizes.size32,
-                        ),
-                      ),
-                    ),
-                    secondaryBackground: Container(
-                      color: Colors.red,
-                      alignment: Alignment.centerRight,
-                      child: const Padding(
-                        padding: EdgeInsets.only(right: Sizes.size10),
-                        child: FaIcon(
-                          FontAwesomeIcons.trashCan,
-                          color: Colors.white,
-                          size: Sizes.size32,
-                        ),
-                      ),
-                    ),
-                    child: ListTile(
-                      minVerticalPadding: Sizes.size16,
-                      leading: Container(
-                        width: Sizes.size52,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          border:
-                              Border.all(color: Colors.grey.shade400, width: 1),
-                        ),
-                        child: const Center(
-                          child: FaIcon(
-                            FontAwesomeIcons.bell,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      title: RichText(
-                        text: TextSpan(
-                          text: 'Account updates:',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: Sizes.size16,
-                          ),
-                          children: [
-                            const TextSpan(
-                              text: ' Upload longer videos',
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                            TextSpan(
-                              text: ' ${notification}h',
-                              style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: Colors.grey.shade500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      trailing: const FaIcon(
-                        FontAwesomeIcons.chevronRight,
-                        size: Sizes.size20,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            if (_showBarrier)
-              AnimatedModalBarrier(
-                color: _barrierAnimation,
-                dismissible: true,
-                onDismiss: _toggleAnimation,
-              ),
-            SlideTransition(
-              position: _panelAnimation,
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(Sizes.size4),
-                    bottomLeft: Radius.circular(Sizes.size4),
-                  ),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    for (var tab in _tabs)
-                      ListTile(
-                        title: Row(
-                          children: [
-                            FaIcon(
-                              tab['icon'],
-                              color: Colors.black,
-                              size: Sizes.size16,
-                            ),
-                            Gaps.h20,
-                            Text(
-                              tab['title'],
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      )
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ));
+        ],
+      ),
+    );
   }
 }
