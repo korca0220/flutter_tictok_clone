@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tictok_clone/constants/gaps.dart';
-import 'package:tictok_clone/constants/sizes.dart';
-import 'package:tictok_clone/features/authentication/email_screen.dart';
-import 'package:tictok_clone/features/authentication/widgets/form_button.dart';
+
+import '../../constants/gaps.dart';
+import '../../constants/sizes.dart';
+import 'email_screen.dart';
+import 'widgets/form_button.dart';
 
 class UsernameScreen extends StatefulWidget {
+  static const routerName = '/user_name';
   const UsernameScreen({super.key});
 
   @override

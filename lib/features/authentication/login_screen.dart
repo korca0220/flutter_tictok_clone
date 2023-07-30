@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
@@ -8,7 +9,7 @@ import 'login_form_screen.dart';
 import 'widgets/auth_button.dart';
 
 void onLoginTap(BuildContext context) {
-  Navigator.of(context).pop();
+  context.pop();
 }
 
 _onEmailLoginTap(BuildContext context) {
@@ -20,6 +21,7 @@ _onEmailLoginTap(BuildContext context) {
 }
 
 class LoginScreen extends StatelessWidget {
+  static const routerName = '/login';
   const LoginScreen({super.key});
 
   @override

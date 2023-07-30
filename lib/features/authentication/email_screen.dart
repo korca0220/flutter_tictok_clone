@@ -6,6 +6,7 @@ import 'password_screen.dart';
 import 'widgets/form_button.dart';
 
 class EmailScreen extends StatefulWidget {
+  static const routerName = '/email';
   const EmailScreen({super.key});
 
   @override

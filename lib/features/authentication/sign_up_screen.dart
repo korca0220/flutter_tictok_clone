@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
@@ -8,27 +9,15 @@ import 'username_screen.dart';
 import 'widgets/auth_button.dart';
 
 void _onLoginTap(BuildContext context) {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) {
-        return const LoginScreen();
-      },
-    ),
-  );
+  context.push(LoginScreen.routerName);
 }
 
 void _onEmailTap(BuildContext context) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) {
-        return const UsernameScreen();
-      },
-    ),
-  );
+  context.push(UsernameScreen.routerName);
 }
 
 class SignUpScreen extends StatelessWidget {
+  static const routerName = '/';
   const SignUpScreen({super.key});
 
   @override

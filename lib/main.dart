@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'constants/sizes.dart';
-import 'features/main_navigation/main_navigation.dart';
+import 'router.dart';
 
 void main() {
   runApp(const TikTokApp());
@@ -13,7 +13,8 @@ class TikTokApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: router,
       debugShowCheckedModeBanner: false,
       title: 'TikTok Clone',
       themeMode: ThemeMode.system,
@@ -65,7 +66,6 @@ class TikTokApp extends StatelessWidget {
           iconColor: Colors.black,
         ),
       ),
-      home: const MainNavigation(),
     );
   }
 }
