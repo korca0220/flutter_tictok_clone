@@ -5,7 +5,14 @@ import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
 
 class ChatDetailScreen extends StatefulWidget {
-  const ChatDetailScreen({super.key});
+  static const String routeName = 'chatDetail';
+  static const String routeURL = ':chatId';
+  const ChatDetailScreen({
+    super.key,
+    required this.chatId,
+  });
+
+  final String chatId;
 
   @override
   State<ChatDetailScreen> createState() => _ChatDetailScreenState();
@@ -14,13 +21,14 @@ class ChatDetailScreen extends StatefulWidget {
 class _ChatDetailScreenState extends State<ChatDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    print(widget.chatId);
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
-        title: const ListTile(
+        title: ListTile(
           contentPadding: EdgeInsets.zero,
           horizontalTitleGap: Sizes.size8,
-          leading: CircleAvatar(
+          leading: const CircleAvatar(
             foregroundImage: NetworkImage(
               'https://avatars.githubusercontent.com/u/25660275?v=4',
             ),
@@ -28,11 +36,11 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
             child: Text('Ju'),
           ),
           title: Text(
-            'Ju',
-            style: TextStyle(fontWeight: FontWeight.w600),
+            'Ju(${widget.chatId})',
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
-          subtitle: Text('Active now'),
-          trailing: Row(
+          subtitle: const Text('Active now'),
+          trailing: const Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               FaIcon(

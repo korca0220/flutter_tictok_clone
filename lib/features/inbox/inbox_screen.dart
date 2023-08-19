@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tictok_clone/constants/sizes.dart';
-import 'package:tictok_clone/features/inbox/activity_screen.dart';
-import 'package:tictok_clone/features/inbox/chats_screen.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../constants/sizes.dart';
+import 'activity_screen.dart';
+import 'chats_screen.dart';
 
 class InboxScreen extends StatefulWidget {
   const InboxScreen({super.key});
@@ -13,17 +15,11 @@ class InboxScreen extends StatefulWidget {
 
 class _InboxScreenState extends State<InboxScreen> {
   void _onDmPressed() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const ChatsScreen(),
-      ),
-    );
+    context.pushNamed(ChatsScreen.routeName);
   }
 
   void _onActivityTap() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => const ActivityScreen(),
-    ));
+    context.pushNamed(ActivityScreen.routeName);
   }
 
   @override

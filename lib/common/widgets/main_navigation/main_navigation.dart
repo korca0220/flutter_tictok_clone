@@ -7,6 +7,7 @@ import '../../../constants/sizes.dart';
 import '../../../features/discover/discover_screen.dart';
 import '../../../features/inbox/inbox_screen.dart';
 import '../../../features/users/user_profile_screen.dart';
+import '../../../features/videos/video_recording_screen.dart';
 import '../../../features/videos/videos_timeline_screen.dart';
 import '../../../utils.dart';
 import 'widgets/nav_tab.dart';
@@ -41,16 +42,7 @@ class _MainNavigationState extends State<MainNavigation> {
   }
 
   void _onPostVideoButtonTap() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(
-            title: const Text('Record Video'),
-          ),
-        ),
-        fullscreenDialog: true,
-      ),
-    );
+    context.pushNamed(VideoRecordingScreen.routeName);
   }
 
   @override
