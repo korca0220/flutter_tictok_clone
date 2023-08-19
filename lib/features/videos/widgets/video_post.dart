@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../common/widgets/video_config/video_config.dart';
 import '../../../constants/gaps.dart';
 import '../../../constants/sizes.dart';
 import 'video_button.dart';
@@ -148,9 +150,11 @@ class _VideoPostState extends State<VideoPost>
             left: 20,
             top: 20,
             child: IconButton(
-              onPressed: () {},
-              icon: const FaIcon(
-                false
+              onPressed: () {
+                context.read<VideoConfig>().toggleIsMuted();
+              },
+              icon: FaIcon(
+                context.watch<VideoConfig>().isMuted
                     ? FontAwesomeIcons.volumeOff
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,

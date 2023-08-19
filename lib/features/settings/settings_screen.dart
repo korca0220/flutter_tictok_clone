@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/widgets/video_config/video_config.dart';
 
@@ -36,18 +37,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onChanged: _onNotificationsChanged,
             title: const Text('Enable notifications'),
           ),
-          AnimatedBuilder(
-            animation: videoConfig,
-            builder: (context, child) {
-              return SwitchListTile.adaptive(
-                value: videoConfig.autoMute,
-                onChanged: (value) {
-                  videoConfig.toggleAutoMute();
-                },
-                title: const Text('Auto Mute'),
-                subtitle: const Text('Videos will be muted by default'),
-              );
-            },
+          SwitchListTile.adaptive(
+            value: context.watch<VideoConfig>().isMuted,
+            onChanged: (value) => context.read<VideoConfig>().toggleIsMuted(),
+            title: const Text('Auto Mute'),
+            subtitle: const Text('Videos will be muted by default'),
+          ),
+          SwitchListTile.adaptive(
+            value: context.watch<VideoConfig>().isAutoPlay,
+            onChanged: (value) => context.read<VideoConfig>().toggleAutoPlay(),
+            title: const Text('Auto Play'),
+            subtitle: const Text('Videos will be played by default'),
           ),
           ListTile(
             onTap: () async {
