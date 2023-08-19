@@ -12,7 +12,8 @@ class VideoRecordingScreen extends StatefulWidget {
   State<VideoRecordingScreen> createState() => _VideoRecordingScreenState();
 }
 
-class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
+class _VideoRecordingScreenState extends State<VideoRecordingScreen>
+    with TickerProviderStateMixin {
   bool hasPermission = false;
 
   bool isSelfieMode = false;
@@ -21,11 +22,39 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
 
   late CameraController cameraController;
 
+  late final AnimationController animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 200),
+  );
+
+  late final AnimationController progressAnimationController =
+      AnimationController(
+    vsync: this,
+    duration: const Duration(
+      seconds: 10,
+    ),
+    lowerBound: 0.0,
+    upperBound: 1.0,
+  );
+
+  late final Animation<double> buttonAnimation =
+      Tween<double>(begin: 1.0, end: 1.3).animate(animationController);
+
   @override
   void initState() {
     super.initState();
 
     initPermissions();
+    progressAnimationController.addListener(() {
+      setState(() {});
+    });
+
+    progressAnimationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        stopRecording();
+        setState(() {});
+      }
+    });
   }
 
   Future<void> initPermissions() async {
@@ -72,6 +101,16 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
     setState(() {});
   }
 
+  void startRecording(TapDownDetails _) {
+    animationController.forward();
+    progressAnimationController.forward();
+  }
+
+  void stopRecording() {
+    animationController.reverse();
+    progressAnimationController.reset();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,7 +152,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
                           onPressed: () => setFlashMode(FlashMode.off),
                           icon: const Icon(Icons.flash_off_rounded),
                           color: flashMode == FlashMode.off
-                              ? Colors.red
+                              ? Colors.amber.shade200
                               : Colors.white,
                         ),
                         Gaps.v10,
@@ -121,7 +160,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
                           onPressed: () => setFlashMode(FlashMode.always),
                           icon: const Icon(Icons.flash_on_rounded),
                           color: flashMode == FlashMode.always
-                              ? Colors.red
+                              ? Colors.amber.shade200
                               : Colors.white,
                         ),
                         Gaps.v10,
@@ -129,7 +168,7 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
                           onPressed: () => setFlashMode(FlashMode.auto),
                           icon: const Icon(Icons.flash_auto_rounded),
                           color: flashMode == FlashMode.auto
-                              ? Colors.red
+                              ? Colors.amber.shade200
                               : Colors.white,
                         ),
                         Gaps.v10,
@@ -137,10 +176,42 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
                           onPressed: () => setFlashMode(FlashMode.torch),
                           icon: const Icon(Icons.flashlight_on_rounded),
                           color: flashMode == FlashMode.torch
-                              ? Colors.red
+                              ? Colors.amber.shade200
                               : Colors.white,
                         ),
                       ],
+                    ),
+                  ),
+                  Positioned(
+                    bottom: Sizes.size40,
+                    child: GestureDetector(
+                      onTapDown: startRecording,
+                      onTapUp: (details) => stopRecording(),
+                      child: ScaleTransition(
+                        scale: buttonAnimation,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: Sizes.size80 + Sizes.size10,
+                              height: Sizes.size80 + Sizes.size10,
+                              child: CircularProgressIndicator(
+                                color: Colors.red.shade400,
+                                strokeWidth: Sizes.size6,
+                                value: progressAnimationController.value,
+                              ),
+                            ),
+                            Container(
+                              width: Sizes.size80,
+                              height: Sizes.size80,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.red.shade500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ],
