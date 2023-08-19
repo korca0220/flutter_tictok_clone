@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import '../../../common/widgets/video_config/video_config.dart';
 import '../../../constants/gaps.dart';
 import '../../../constants/sizes.dart';
 import 'video_button.dart';
@@ -104,7 +103,6 @@ class _VideoPostState extends State<VideoPost>
 
   @override
   Widget build(BuildContext context) {
-    print(VideoConfigData.of(context).autoMute);
     return VisibilityDetector(
       key: Key('${widget.index}'),
       onVisibilityChanged: _onVisibilityChanged,
@@ -150,9 +148,9 @@ class _VideoPostState extends State<VideoPost>
             left: 20,
             top: 20,
             child: IconButton(
-              onPressed: VideoConfigData.of(context).toggleMuted,
-              icon: FaIcon(
-                VideoConfigData.of(context).autoMute
+              onPressed: () {},
+              icon: const FaIcon(
+                false
                     ? FontAwesomeIcons.volumeOff
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,
