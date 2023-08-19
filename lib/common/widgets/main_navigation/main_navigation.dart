@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../constants/gaps.dart';
 import '../../../constants/sizes.dart';
@@ -12,16 +13,28 @@ import 'widgets/nav_tab.dart';
 import 'widgets/post_video_button.dart';
 
 class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
+  static const routeName = 'mainNavigation';
+
+  const MainNavigation({super.key, required this.tab});
+
+  final String tab;
 
   @override
   State<MainNavigation> createState() => _MainNavigationState();
 }
 
 class _MainNavigationState extends State<MainNavigation> {
-  int _currentIndex = 4;
+  final List<String> _tabs = [
+    'home',
+    'discover',
+    'xxxx',
+    'inbox',
+    'profile',
+  ];
+  late int _currentIndex = _tabs.indexOf(widget.tab);
 
   void _onTap(int index) {
+    context.go('/${_tabs[index]}');
     setState(() {
       _currentIndex = index;
     });

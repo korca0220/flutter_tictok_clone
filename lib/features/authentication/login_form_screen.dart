@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tictok_clone/constants/gaps.dart';
-import 'package:tictok_clone/constants/sizes.dart';
-import 'package:tictok_clone/features/authentication/widgets/form_button.dart';
-import 'package:tictok_clone/features/onboading/interests_screen.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../constants/gaps.dart';
+import '../../constants/sizes.dart';
+import '../onboading/interests_screen.dart';
+import 'widgets/form_button.dart';
 
 class LoginFormScreen extends StatefulWidget {
   const LoginFormScreen({super.key});
@@ -19,15 +21,8 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
   void _onSubmitTap() {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
-        // TextFormField onSaved 콜백
         _formKey.currentState!.save();
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const InterestsScreen(),
-            ), (route) {
-          return false;
-        });
+        context.goNamed(InterestsScreen.routeName);
       }
     }
   }

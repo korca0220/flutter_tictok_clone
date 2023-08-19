@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../common/widgets/main_navigation/main_navigation.dart';
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
 import '../../utils.dart';
@@ -48,13 +48,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
   }
 
   void _onEnterAppTap() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const MainNavigation(),
-        ), (route) {
-      return false;
-    });
+    context.go('/home');
   }
 
   @override
