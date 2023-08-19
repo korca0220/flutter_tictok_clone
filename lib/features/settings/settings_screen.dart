@@ -3,6 +3,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/widgets/video_config/video_config.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -33,6 +35,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             value: _notifications,
             onChanged: _onNotificationsChanged,
             title: const Text('Enable notifications'),
+          ),
+          SwitchListTile.adaptive(
+            value: VideoConfigData.of(context).autoMute,
+            onChanged: (value) => VideoConfigData.of(context).toggleMuted(),
+            title: const Text('Auto Mute'),
+            subtitle: const Text('Videos will be muted by default'),
           ),
           ListTile(
             onTap: () async {

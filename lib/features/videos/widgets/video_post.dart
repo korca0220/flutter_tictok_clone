@@ -104,7 +104,7 @@ class _VideoPostState extends State<VideoPost>
 
   @override
   Widget build(BuildContext context) {
-    print(VideoConfig.of(context).autoMute);
+    print(VideoConfigData.of(context).autoMute);
     return VisibilityDetector(
       key: Key('${widget.index}'),
       onVisibilityChanged: _onVisibilityChanged,
@@ -150,9 +150,9 @@ class _VideoPostState extends State<VideoPost>
             left: 20,
             top: 20,
             child: IconButton(
-              onPressed: () {},
+              onPressed: VideoConfigData.of(context).toggleMuted,
               icon: FaIcon(
-                VideoConfig.of(context).autoMute
+                VideoConfigData.of(context).autoMute
                     ? FontAwesomeIcons.volumeOff
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,
