@@ -4,6 +4,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
+import 'video_preview_screen.dart';
 
 class VideoRecordingScreen extends StatefulWidget {
   const VideoRecordingScreen({super.key});
@@ -57,6 +58,14 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     });
   }
 
+  @override
+  void dispose() {
+    progressAnimationController.dispose();
+    animationController.dispose();
+    cameraController.dispose();
+    super.dispose();
+  }
+
   Future<void> initPermissions() async {
     final cameraPermission = await Permission.camera.request();
     final micPermission = await Permission.microphone.request();
@@ -82,9 +91,12 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     cameraController = CameraController(
       cameras[isSelfieMode ? 1 : 0],
       ResolutionPreset.ultraHigh,
+      enableAudio: false,
     );
 
     await cameraController.initialize();
+
+    await cameraController.prepareForVideoRecording();
 
     flashMode = cameraController.value.flashMode;
   }
@@ -101,14 +113,28 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     setState(() {});
   }
 
-  void startRecording(TapDownDetails _) {
+  Future<void> startRecording(TapDownDetails _) async {
+    if (cameraController.value.isRecordingVideo) return;
+
     animationController.forward();
     progressAnimationController.forward();
+
+    await cameraController.startVideoRecording();
   }
 
-  void stopRecording() {
+  Future<void> stopRecording() async {
+    if (!cameraController.value.isRecordingVideo) return;
     animationController.reverse();
     progressAnimationController.reset();
+
+    final file = await cameraController.stopVideoRecording();
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPreviewScreen(video: file),
+      ),
+    );
   }
 
   @override
