@@ -47,5 +47,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Add Privacy Photo Library</String>
+	<key>NSPhotoLibraryUsageDescription</key> 
+	<string>Privacy Photo Library</string>
 </dict>
 </plist>
