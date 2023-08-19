@@ -15,13 +15,51 @@ class VideoRecordingScreen extends StatefulWidget {
 class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
   bool hasPermission = false;
 
-  late final CameraController cameraController;
+  bool isSelfieMode = false;
+
+  late CameraController cameraController;
 
   @override
   void initState() {
     super.initState();
 
     initPermissions();
+  }
+
+  Future<void> initPermissions() async {
+    final cameraPermission = await Permission.camera.request();
+    final micPermission = await Permission.microphone.request();
+
+    final cameraDenied =
+        cameraPermission.isDenied || cameraPermission.isPermanentlyDenied;
+
+    final micDenied =
+        cameraPermission.isDenied || micPermission.isPermanentlyDenied;
+
+    if (!cameraDenied && !micDenied) {
+      hasPermission = true;
+      await initCamera();
+      setState(() {});
+    }
+  }
+
+  Future<void> initCamera() async {
+    final cameras = await availableCameras();
+
+    if (cameras.isEmpty) return;
+
+    cameraController = CameraController(
+      cameras[isSelfieMode ? 1 : 0],
+      ResolutionPreset.ultraHigh,
+    );
+
+    await cameraController.initialize();
+  }
+
+  Future<void> toggleSelfieMode() async {
+    isSelfieMode = !isSelfieMode;
+    await initCamera();
+    setState(() {});
   }
 
   @override
@@ -50,36 +88,18 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen> {
                 alignment: Alignment.center,
                 children: [
                   CameraPreview(cameraController),
+                  Positioned(
+                    top: Sizes.size20,
+                    left: Sizes.size20,
+                    child: IconButton(
+                      onPressed: toggleSelfieMode,
+                      icon: const Icon(Icons.cameraswitch),
+                      color: Colors.red,
+                    ),
+                  )
                 ],
               ),
       ),
     );
-  }
-
-  Future<void> initPermissions() async {
-    final cameraPermission = await Permission.camera.request();
-    final micPermission = await Permission.microphone.request();
-
-    final cameraDenied =
-        cameraPermission.isDenied || cameraPermission.isPermanentlyDenied;
-
-    final micDenied =
-        cameraPermission.isDenied || micPermission.isPermanentlyDenied;
-
-    if (!cameraDenied && !micDenied) {
-      hasPermission = true;
-      await initCamera();
-      setState(() {});
-    }
-  }
-
-  Future<void> initCamera() async {
-    final cameras = await availableCameras();
-
-    if (cameras.isEmpty) return;
-
-    cameraController = CameraController(cameras[0], ResolutionPreset.ultraHigh);
-
-    await cameraController.initialize();
   }
 }
