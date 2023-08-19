@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../common/widgets/main_navigation/main_navigation.dart';
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
 import '../../utils.dart';
-import '../main_navigation/main_navigation.dart';
 
 enum Direction { right, left }
 

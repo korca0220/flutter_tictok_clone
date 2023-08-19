@@ -13,7 +13,14 @@ void _onLoginTap(BuildContext context) {
 }
 
 void _onEmailTap(BuildContext context) {
-  context.pushNamed(UsernameScreen.routeName);
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) {
+        return const UsernameScreen();
+      },
+    ),
+  );
 }
 
 class SignUpScreen extends StatelessWidget {

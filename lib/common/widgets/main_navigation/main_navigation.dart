@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../constants/gaps.dart';
-import '../../constants/sizes.dart';
-import '../../utils.dart';
-import '../discover/discover_screen.dart';
-import '../inbox/inbox_screen.dart';
-import '../users/user_profile_screen.dart';
-import '../videos/videos_timeline_screen.dart';
+import '../../../constants/gaps.dart';
+import '../../../constants/sizes.dart';
+import '../../../features/discover/discover_screen.dart';
+import '../../../features/inbox/inbox_screen.dart';
+import '../../../features/users/user_profile_screen.dart';
+import '../../../features/videos/videos_timeline_screen.dart';
+import '../../../utils.dart';
 import 'widgets/nav_tab.dart';
 import 'widgets/post_video_button.dart';
 

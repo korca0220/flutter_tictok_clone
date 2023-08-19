@@ -6,9 +6,12 @@ import 'password_screen.dart';
 import 'widgets/form_button.dart';
 
 class EmailScreen extends StatefulWidget {
-  static const routeURL = 'email';
-  static const routeName = 'email';
-  const EmailScreen({super.key});
+  const EmailScreen({
+    super.key,
+    required this.userName,
+  });
+
+  final String userName;
 
   @override
   State<EmailScreen> createState() => _EmailScreenState();
@@ -76,9 +79,9 @@ class _EmailScreenState extends State<EmailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Gaps.v10,
-              const Text(
-                'What is your email?',
-                style: TextStyle(
+              Text(
+                'What is your email, ${widget.userName}?',
+                style: const TextStyle(
                   fontSize: Sizes.size20,
                   fontWeight: FontWeight.w800,
                 ),
