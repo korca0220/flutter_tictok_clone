@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../constants/gaps.dart';
 import '../../../../constants/sizes.dart';
+import '../../view_models/playback_config_view_model.dart';
 import 'video_button.dart';
 import 'video_comments.dart';
 
-class VideoPost extends StatefulWidget {
+class VideoPost extends ConsumerStatefulWidget {
   final int index;
   const VideoPost({
     super.key,
@@ -16,10 +18,10 @@ class VideoPost extends StatefulWidget {
   });
 
   @override
-  State<VideoPost> createState() => _VideoPostState();
+  VideoPostState createState() => VideoPostState();
 }
 
-class _VideoPostState extends State<VideoPost>
+class VideoPostState extends ConsumerState<VideoPost>
     with SingleTickerProviderStateMixin {
   final _videoController =
       VideoPlayerController.asset('assets/videos/video.mp4');
@@ -29,17 +31,16 @@ class _VideoPostState extends State<VideoPost>
 
   bool _isPaused = false;
   bool _isMoreText = false;
-  // late bool _isMuted = context.read<PlaybackConfigViewModel>().muted;
-  late bool _isMuted = false;
+  late bool _isMuted = ref.read(playbackConfigProvider).muted;
 
   void _onVisibilityChanged(VisibilityInfo info) {
     if (!mounted) return;
     if (info.visibleFraction == 1 &&
         !_videoController.value.isPlaying &&
         !_isPaused) {
-      // final autoplay = context.read<PlaybackConfigViewModel>().autoPlay;
+      final autoplay = ref.read(playbackConfigProvider).autoplay;
 
-      // if (autoplay) _videoController.play();
+      if (autoplay) _videoController.play();
     }
     if (_videoController.value.isPlaying && info.visibleFraction == 0) {
       _onTogglePause();

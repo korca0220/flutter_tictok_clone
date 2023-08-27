@@ -36,7 +36,7 @@ class SettingsScreen extends ConsumerWidget {
           ),
           ListTile(
             onTap: () async {
-              final date = await showDatePicker(
+              await showDatePicker(
                 context: context,
                 initialDate: DateTime.now(),
                 firstDate: DateTime(1980),
