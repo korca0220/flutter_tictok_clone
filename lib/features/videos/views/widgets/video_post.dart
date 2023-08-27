@@ -31,6 +31,7 @@ class _VideoPostState extends State<VideoPost>
 
   bool _isPaused = false;
   bool _isMoreText = false;
+  late bool _isMuted = context.read<PlaybackConfigViewModel>().muted;
 
   void _onVisibilityChanged(VisibilityInfo info) {
     if (!mounted) return;
@@ -77,29 +78,13 @@ class _VideoPostState extends State<VideoPost>
       value: 1.5,
       duration: _animationDuration,
     );
-
-    context.read<PlaybackConfigViewModel>().addListener(
-          _onPlaybackConfigChanged,
-        );
   }
 
   @override
   void dispose() {
     _videoController.dispose();
-    context
-        .read<PlaybackConfigViewModel>()
-        .removeListener(_onPlaybackConfigChanged);
-    super.dispose();
-  }
 
-  void _onPlaybackConfigChanged() {
-    if (!mounted) return;
-    final muted = context.read<PlaybackConfigViewModel>().muted;
-    if (muted) {
-      _videoController.setVolume(0);
-    } else {
-      _videoController.setVolume(1);
-    }
+    super.dispose();
   }
 
   void _onTapMoreText() {
@@ -170,12 +155,11 @@ class _VideoPostState extends State<VideoPost>
             top: 20,
             child: IconButton(
               onPressed: () {
-                context.read<PlaybackConfigViewModel>().setMuted(
-                      !context.read<PlaybackConfigViewModel>().muted,
-                    );
+                _isMuted = !_isMuted;
+                setState(() {});
               },
               icon: FaIcon(
-                context.watch<PlaybackConfigViewModel>().muted
+                _isMuted
                     ? FontAwesomeIcons.volumeOff
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,
