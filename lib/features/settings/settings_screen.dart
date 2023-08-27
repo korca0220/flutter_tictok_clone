@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../common/widgets/video_config/video_config.dart';
+import '../videos/view_models/playback_config_view_model.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -33,21 +33,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         children: [
           SwitchListTile.adaptive(
-            value: _notifications,
-            onChanged: _onNotificationsChanged,
-            title: const Text('Enable notifications'),
-          ),
-          SwitchListTile.adaptive(
-            value: context.watch<VideoConfig>().isMuted,
-            onChanged: (value) => context.read<VideoConfig>().toggleIsMuted(),
+            value: context.watch<PlaybackConfigViewModel>().muted,
+            onChanged: (value) =>
+                context.read<PlaybackConfigViewModel>().setMuted(value),
             title: const Text('Auto Mute'),
             subtitle: const Text('Videos will be muted by default'),
           ),
           SwitchListTile.adaptive(
-            value: context.watch<VideoConfig>().isAutoPlay,
-            onChanged: (value) => context.read<VideoConfig>().toggleAutoPlay(),
+            value: context.watch<PlaybackConfigViewModel>().autoPlay,
+            onChanged: (value) =>
+                context.read<PlaybackConfigViewModel>().setAutoplay(value),
             title: const Text('Auto Play'),
             subtitle: const Text('Videos will be played by default'),
+          ),
+          SwitchListTile.adaptive(
+            value: _notifications,
+            onChanged: _onNotificationsChanged,
+            title: const Text('Enable notifications'),
           ),
           ListTile(
             onTap: () async {
