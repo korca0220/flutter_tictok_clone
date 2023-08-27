@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gal/gal.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoPreviewScreen extends StatefulWidget {
+import '../view_models/timeline_view_model.dart';
+
+class VideoPreviewScreen extends ConsumerStatefulWidget {
   const VideoPreviewScreen({
     super.key,
     required this.video,
@@ -17,10 +20,10 @@ class VideoPreviewScreen extends StatefulWidget {
   final XFile video;
 
   @override
-  State<VideoPreviewScreen> createState() => _VideoPreviewScreenState();
+  VideoPreviewScreenState createState() => VideoPreviewScreenState();
 }
 
-class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
+class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   bool savedVideo = false;
 
   late final VideoPlayerController videoPlayerController;
@@ -36,7 +39,8 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
 
     await videoPlayerController.initialize();
     await videoPlayerController.setLooping(true);
-    await videoPlayerController.play();
+    await videoPlayerController.setVolume(0);
+    // await videoPlayerController.play();
     setState(() {});
   }
 
@@ -55,6 +59,10 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
     setState(() {});
   }
 
+  void _onUploadPressed() {
+    ref.read(timelineProvider.notifier).uploadVideo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,10 +72,14 @@ class _VideoPreviewScreenState extends State<VideoPreviewScreen> {
         actions: [
           if (widget.isPicked == false)
             IconButton(
-              onPressed: saveToGallery,
-              icon: FaIcon(
-                savedVideo ? FontAwesomeIcons.check : FontAwesomeIcons.download,
-              ),
+              onPressed: _onUploadPressed,
+              icon: ref.watch(timelineProvider).isLoading
+                  ? const CircularProgressIndicator()
+                  : FaIcon(
+                      savedVideo
+                          ? FontAwesomeIcons.check
+                          : FontAwesomeIcons.download,
+                    ),
             ),
         ],
       ),

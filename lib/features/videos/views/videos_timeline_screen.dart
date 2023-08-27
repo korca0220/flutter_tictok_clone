@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../view_models/timeline_view_model.dart';
 import 'widgets/video_post.dart';
 
-class VideosTimelineScreen extends StatefulWidget {
+class VideosTimelineScreen extends ConsumerStatefulWidget {
   const VideosTimelineScreen({super.key});
 
   @override
-  State<VideosTimelineScreen> createState() => _VideosTimelineScreenState();
+  VideosTimelineScreenState createState() => VideosTimelineScreenState();
 }
 
-class _VideosTimelineScreenState extends State<VideosTimelineScreen> {
+class VideosTimelineScreenState extends ConsumerState<VideosTimelineScreen> {
   final _pageController = PageController();
   final _scrollDuration = const Duration(milliseconds: 250);
   final _scrollCurve = Curves.linear;
@@ -28,26 +30,34 @@ class _VideosTimelineScreenState extends State<VideosTimelineScreen> {
     }
   }
 
-  void _onVideoFinished() {
-    return;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _onRefresh,
-      displacement: 50,
-      edgeOffset: 20,
-      child: PageView.builder(
-        controller: _pageController,
-        scrollDirection: Axis.vertical,
-        onPageChanged: _onPageChanged,
-        itemCount: _itemCount,
-        itemBuilder: (context, index) => VideoPost(
-          index: index,
-        ),
-      ),
-    );
+    return ref.watch(timelineProvider).when(
+          error: (error, stackTrace) => Center(
+            child: Text(
+              'Could not load videos $error',
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+          loading: () => const Center(
+            child: CircularProgressIndicator(),
+          ),
+          data: (videos) => RefreshIndicator(
+            onRefresh: _onRefresh,
+            displacement: 50,
+            edgeOffset: 20,
+            color: Theme.of(context).primaryColor,
+            child: PageView.builder(
+              controller: _pageController,
+              scrollDirection: Axis.vertical,
+              onPageChanged: _onPageChanged,
+              itemCount: videos.length,
+              itemBuilder: (context, index) => VideoPost(
+                index: index,
+              ),
+            ),
+          ),
+        );
   }
 
   Future<void> _onRefresh() {
