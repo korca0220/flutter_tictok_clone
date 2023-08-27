@@ -2,27 +2,15 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingsScreen extends StatefulWidget {
+import '../videos/view_models/playback_config_view_model.dart';
+
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool _notifications = false;
-
-  _onNotificationsChanged(bool? newValue) {
-    if (newValue != null) {
-      setState(() {
-        _notifications = !_notifications;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -30,20 +18,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
       body: ListView(
         children: [
           SwitchListTile.adaptive(
-            value: false,
-            onChanged: (value) => {},
+            value: ref.watch(playbackConfigProvider).muted,
+            onChanged: ref.read(playbackConfigProvider.notifier).setMuted,
             title: const Text('Auto Mute'),
             subtitle: const Text('Videos will be muted by default'),
           ),
           SwitchListTile.adaptive(
-            value: false,
-            onChanged: (value) => {},
+            value: ref.watch(playbackConfigProvider).autoplay,
+            onChanged: ref.read(playbackConfigProvider.notifier).setAutoplay,
             title: const Text('Auto Play'),
             subtitle: const Text('Videos will be played by default'),
           ),
           SwitchListTile.adaptive(
             value: false,
-            onChanged: _onNotificationsChanged,
+            onChanged: (value) => {},
             title: const Text('Enable notifications'),
           ),
           ListTile(
@@ -55,35 +43,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 lastDate: DateTime(2030),
               );
 
-              print(date);
+              await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
 
-              if (context.mounted) {
-                final time = await showTimePicker(
-                  context: context,
-                  initialTime: TimeOfDay.now(),
-                );
-                print(time);
-              }
-
-              if (context.mounted) {
-                final booking = await showDateRangePicker(
-                  context: context,
-                  firstDate: DateTime(1980),
-                  lastDate: DateTime(2000),
-                  builder: (context, child) {
-                    return Theme(
-                      data: ThemeData(
-                        appBarTheme: const AppBarTheme(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.black,
-                        ),
+              await showDateRangePicker(
+                context: context,
+                firstDate: DateTime(1980),
+                lastDate: DateTime(2000),
+                builder: (context, child) {
+                  return Theme(
+                    data: ThemeData(
+                      appBarTheme: const AppBarTheme(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.black,
                       ),
-                      child: child!,
-                    );
-                  },
-                );
-                print(booking);
-              }
+                    ),
+                    child: child!,
+                  );
+                },
+              );
             },
             title: const Text('What is your birthday?'),
           ),
