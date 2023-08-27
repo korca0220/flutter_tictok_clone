@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import '../../../../common/widgets/video_config/video_config.dart';
 import '../../../../constants/gaps.dart';
 import '../../../../constants/sizes.dart';
+import '../../view_models/playback_config_view_model.dart';
 import 'video_button.dart';
 import 'video_comments.dart';
 
@@ -37,7 +37,9 @@ class _VideoPostState extends State<VideoPost>
     if (info.visibleFraction == 1 &&
         !_videoController.value.isPlaying &&
         !_isPaused) {
-      _videoController.play();
+      final autoplay = context.read<PlaybackConfigViewModel>().autoPlay;
+
+      if (autoplay) _videoController.play();
     }
     if (_videoController.value.isPlaying && info.visibleFraction == 0) {
       _onTogglePause();
@@ -75,12 +77,29 @@ class _VideoPostState extends State<VideoPost>
       value: 1.5,
       duration: _animationDuration,
     );
+
+    context.read<PlaybackConfigViewModel>().addListener(
+          _onPlaybackConfigChanged,
+        );
   }
 
   @override
   void dispose() {
     _videoController.dispose();
+    context
+        .read<PlaybackConfigViewModel>()
+        .removeListener(_onPlaybackConfigChanged);
     super.dispose();
+  }
+
+  void _onPlaybackConfigChanged() {
+    if (!mounted) return;
+    final muted = context.read<PlaybackConfigViewModel>().muted;
+    if (muted) {
+      _videoController.setVolume(0);
+    } else {
+      _videoController.setVolume(1);
+    }
   }
 
   void _onTapMoreText() {
@@ -151,10 +170,12 @@ class _VideoPostState extends State<VideoPost>
             top: 20,
             child: IconButton(
               onPressed: () {
-                context.read<VideoConfig>().toggleIsMuted();
+                context.read<PlaybackConfigViewModel>().setMuted(
+                      !context.read<PlaybackConfigViewModel>().muted,
+                    );
               },
               icon: FaIcon(
-                context.watch<VideoConfig>().isMuted
+                context.watch<PlaybackConfigViewModel>().muted
                     ? FontAwesomeIcons.volumeOff
                     : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,
