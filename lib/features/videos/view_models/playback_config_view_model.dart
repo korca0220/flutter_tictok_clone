@@ -1,29 +1,41 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/playback_config_model.dart';
 import '../repos/playback_config_repo.dart';
 
-class PlaybackConfigViewModel extends ChangeNotifier {
+final playbackConfigProvider =
+    NotifierProvider<PlaybackConfigViewModel, PlaybackConfigModel>(
+  () => throw UnimplementedError(),
+);
+
+class PlaybackConfigViewModel extends Notifier<PlaybackConfigModel> {
   PlaybackConfigViewModel(this._repository);
   final PlaybackConfigRepository _repository;
 
-  late final PlaybackConfigModel _model = PlaybackConfigModel(
-    muted: _repository.getMuted(),
-    autoplay: _repository.getAutoplay(),
-  );
-
-  bool get muted => _model.muted;
-  bool get autoPlay => _model.autoplay;
+  bool get muted => state.muted;
+  bool get autoPlay => state.autoplay;
 
   void setMuted(bool value) {
     _repository.setMuted(value);
-    _model.muted = value;
-    notifyListeners();
+    state = PlaybackConfigModel(
+      muted: value,
+      autoplay: state.autoplay,
+    );
   }
 
   void setAutoplay(bool value) {
     _repository.setAutoplay(value);
-    _model.autoplay = value;
-    notifyListeners();
+    state = PlaybackConfigModel(
+      muted: state.muted,
+      autoplay: value,
+    );
+  }
+
+  @override
+  PlaybackConfigModel build() {
+    return PlaybackConfigModel(
+      muted: _repository.getMuted(),
+      autoplay: _repository.getAutoplay(),
+    );
   }
 }
