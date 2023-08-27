@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tictok_clone/features/videos/widgets/video_post.dart';
+
+import 'widgets/video_post.dart';
 
 class VideosTimelineScreen extends StatefulWidget {
   const VideosTimelineScreen({super.key});
@@ -16,8 +17,11 @@ class _VideosTimelineScreenState extends State<VideosTimelineScreen> {
   int _itemCount = 4;
 
   void _onPageChanged(int page) {
-    _pageController.animateToPage(page,
-        duration: _scrollDuration, curve: _scrollCurve);
+    _pageController.animateToPage(
+      page,
+      duration: _scrollDuration,
+      curve: _scrollCurve,
+    );
     if (page == _itemCount - 1) {
       _itemCount = _itemCount + 4;
       setState(() {});

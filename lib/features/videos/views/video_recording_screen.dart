@@ -4,8 +4,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../constants/gaps.dart';
-import '../../constants/sizes.dart';
+import '../../../../constants/gaps.dart';
+import '../../../../constants/sizes.dart';
 import 'video_preview_screen.dart';
 
 class VideoRecordingScreen extends StatefulWidget {
@@ -20,7 +20,6 @@ class VideoRecordingScreen extends StatefulWidget {
 class _VideoRecordingScreenState extends State<VideoRecordingScreen>
     with TickerProviderStateMixin {
   bool hasPermission = false;
-
   bool isSelfieMode = false;
 
   late FlashMode flashMode;
