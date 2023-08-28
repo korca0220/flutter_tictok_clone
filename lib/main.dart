@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,10 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'constants/sizes.dart';
 import 'features/videos/repos/playback_config_repo.dart';
 import 'features/videos/view_models/playback_config_view_model.dart';
+import 'firebase_options.dart';
 import 'router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   await SystemChrome.setPreferredOrientations(
     [
