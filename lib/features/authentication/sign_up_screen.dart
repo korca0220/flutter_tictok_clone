@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,6 +7,7 @@ import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
 import 'login_screen.dart';
 import 'username_screen.dart';
+import 'view_models/social_auth_view_model.dart';
 import 'widgets/auth_button.dart';
 
 void _onLoginTap(BuildContext context) {
@@ -23,13 +25,13 @@ void _onEmailTap(BuildContext context) {
   );
 }
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends ConsumerWidget {
   static const routeURL = '/';
   static const routeName = 'signup';
   const SignUpScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -66,9 +68,11 @@ class SignUpScreen extends StatelessWidget {
               ),
               Gaps.v16,
               AuthButton(
-                icon: const FaIcon(FontAwesomeIcons.apple),
-                text: 'Continue with Apple',
-                onTap: () {},
+                icon: const FaIcon(FontAwesomeIcons.github),
+                text: 'Continue with GitHub',
+                onTap: () {
+                  ref.read(socialAuthProvider.notifier).githubSignIn(context);
+                },
               ),
               Gaps.v16,
               AuthButton(
