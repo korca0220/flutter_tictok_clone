@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
-import '../onboading/interests_screen.dart';
+import 'view_models/login_view_model.dart';
 import 'widgets/form_button.dart';
 
-class LoginFormScreen extends StatefulWidget {
+class LoginFormScreen extends ConsumerStatefulWidget {
   const LoginFormScreen({super.key});
 
   @override
-  State<LoginFormScreen> createState() => _LoginFormScreenState();
+  LoginFormScreenState createState() => LoginFormScreenState();
 }
 
-class _LoginFormScreenState extends State<LoginFormScreen> {
+class LoginFormScreenState extends ConsumerState<LoginFormScreen> {
   final _formKey = GlobalKey<FormState>();
 
   Map<String, dynamic> formData = {};
@@ -22,7 +22,11 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        context.goNamed(InterestsScreen.routeName);
+        ref.read(loginProvider.notifier).login(
+              formData['email']!,
+              formData['password']!,
+              context,
+            );
       }
     }
   }
@@ -71,9 +75,9 @@ class _LoginFormScreenState extends State<LoginFormScreen> {
               Gaps.v28,
               GestureDetector(
                 onTap: _onSubmitTap,
-                child: const FormButton(
+                child: FormButton(
                   text: 'Login',
-                  disabled: false,
+                  disabled: ref.watch(loginProvider).isLoading,
                 ),
               ),
             ],

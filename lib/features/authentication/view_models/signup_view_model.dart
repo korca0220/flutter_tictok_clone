@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../utils.dart';
+import '../../onboading/interests_screen.dart';
 import '../repos/authentication_repo.dart';
 
 final signUpForm = StateProvider((ref) => {});
@@ -18,7 +22,7 @@ class SignUpViewModel extends AsyncNotifier<void> {
     _authRepo = ref.read(authRepo);
   }
 
-  Future<void> signUp() async {
+  Future<void> signUp(BuildContext context) async {
     state = const AsyncValue.loading();
     final form = ref.read(signUpForm);
 
@@ -28,5 +32,10 @@ class SignUpViewModel extends AsyncNotifier<void> {
         form['password'],
       ),
     );
+    if (state.hasError) {
+      showFirebaseErrorSnack(context, state.error);
+    } else {
+      context.goNamed(InterestsScreen.routeName);
+    }
   }
 }
