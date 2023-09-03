@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../authentication/repos/authentication_repo.dart';
 import '../models/user_profile_model.dart';
 import '../repos/user_repo.dart';
 
@@ -11,15 +12,23 @@ final usersProvider = AsyncNotifierProvider<UsersViewModel, UserProfileModel>(
 );
 
 class UsersViewModel extends AsyncNotifier<UserProfileModel> {
-  late final UserRepository _repository;
+  late final UserRepository _userRepository;
+  late final AuthenticationRepository _authenticationRepository;
 
   @override
-  FutureOr<UserProfileModel> build() {
-    _repository = ref.read(userRepo);
+  FutureOr<UserProfileModel> build() async {
+    _userRepository = ref.read(userRepo);
+    _authenticationRepository = ref.read(authRepo);
+
+    if (_authenticationRepository.isLoggedIn) {
+      final profile = await _userRepository.getProfile(
+        _authenticationRepository.user!.uid,
+      );
+    }
     return UserProfileModel.empty();
   }
 
-  Future<void> createProfile(UserCredential userCredential) async {
+  Future<void> createProfile(UserCredential userCredential, String name) async {
     if (userCredential.user == null) {
       throw Exception('Account not created');
     }
@@ -27,11 +36,11 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
     final profile = UserProfileModel(
       uid: userCredential.user!.uid,
       email: userCredential.user!.email ?? 'anon@anon.com',
-      name: userCredential.user!.displayName ?? 'Anon',
+      name: userCredential.user!.displayName ?? name,
       bio: 'undefined',
       link: 'undefined',
     );
-    await _repository.createProfile(profile);
+    await _userRepository.createProfile(profile);
     state = AsyncValue.data(profile);
   }
 }

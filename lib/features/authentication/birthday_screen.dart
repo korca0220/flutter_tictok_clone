@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
-import '../onboading/interests_screen.dart';
 import 'view_models/signup_view_model.dart';
 import 'widgets/form_button.dart';
 
@@ -36,8 +34,6 @@ class BirthdayScreenState extends ConsumerState<BirthdayScreen> {
 
   void _onNextTap() {
     ref.read(signUpProvider.notifier).signUp(context);
-
-    context.goNamed(InterestsScreen.routeName);
   }
 
   void _setTextFieldDate(DateTime date) {
