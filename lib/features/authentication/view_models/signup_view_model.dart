@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../utils.dart';
 import '../../onboading/interests_screen.dart';
+import '../../users/view_models/user_view_model.dart';
 import '../repos/authentication_repo.dart';
 
 final signUpForm = StateProvider((ref) => {});
@@ -25,13 +26,17 @@ class SignUpViewModel extends AsyncNotifier<void> {
   Future<void> signUp(BuildContext context) async {
     state = const AsyncValue.loading();
     final form = ref.read(signUpForm);
+    final users = ref.read(usersProvider.notifier);
 
-    state = await AsyncValue.guard(
-      () async => await _authRepo.signUp(
+    state = await AsyncValue.guard(() async {
+      final userCredential = await _authRepo.signUp(
         form['email'],
         form['password'],
-      ),
-    );
+      );
+      if (userCredential.user != null) {
+        await users.createAccount(userCredential);
+      }
+    });
     if (state.hasError) {
       showFirebaseErrorSnack(context, state.error);
     } else {
