@@ -9,13 +9,15 @@ import '../view_models/user_avatar_view_model.dart';
 class UserAvatar extends ConsumerWidget {
   const UserAvatar({
     super.key,
+    required this.uid,
     required this.name,
     required this.hasAvatar,
   });
+  final String uid;
   final String name;
   final bool hasAvatar;
 
-  Future<void> _onAvatarTap(WidgetRef ref) async {
+  Future<void> _onAvatarTap(BuildContext context, WidgetRef ref) async {
     final xFile = await ImagePicker().pickImage(
       source: ImageSource.gallery,
       imageQuality: 40,
@@ -24,7 +26,7 @@ class UserAvatar extends ConsumerWidget {
     );
     if (xFile != null) {
       final file = File(xFile.path);
-      ref.read(userAvatarProvider.notifier).uploadAvatar(file);
+      ref.read(userAvatarProvider.notifier).uploadAvatar(context, file);
     }
   }
 
@@ -32,7 +34,7 @@ class UserAvatar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = ref.watch(userAvatarProvider).isLoading;
     return GestureDetector(
-      onTap: isLoading ? null : () => _onAvatarTap(ref),
+      onTap: isLoading ? null : () => _onAvatarTap(context, ref),
       child: isLoading
           ? Container(
               width: 100,
@@ -46,8 +48,8 @@ class UserAvatar extends ConsumerWidget {
           : CircleAvatar(
               radius: 50,
               foregroundImage: hasAvatar
-                  ? const NetworkImage(
-                      'https://avatars.githubusercontent.com/u/25660275?v=4',
+                  ? NetworkImage(
+                      'https://firebasestorage.googleapis.com/v0/b/tik-tok-junewoo.appspot.com/o/avatars%2F$uid?alt=media&token=b15373e4-a8b7-4a0d-8f8a-0e2d907cbd63',
                     )
                   : null,
               child: Text(name),
