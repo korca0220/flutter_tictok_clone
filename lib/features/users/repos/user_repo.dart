@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/user_profile_model.dart';
@@ -6,6 +9,7 @@ import '../models/user_profile_model.dart';
 final userRepo = Provider((ref) => UserRepository());
 
 class UserRepository {
+  final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // create profile
@@ -20,6 +24,10 @@ class UserRepository {
   }
 
   // update avatar
+  Future<void> uploadAvatar(File file, String fileName) async {
+    final fileRef = _firebaseStorage.ref().child('avatars/$fileName');
+    await fileRef.putFile(file);
+  }
 
   // update bio
 }

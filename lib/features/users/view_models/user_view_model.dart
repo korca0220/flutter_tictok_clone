@@ -17,6 +17,8 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
 
   @override
   FutureOr<UserProfileModel> build() async {
+    await Future.delayed(const Duration(seconds: 2));
+
     _userRepository = ref.read(userRepo);
     _authenticationRepository = ref.read(authRepo);
 
@@ -24,6 +26,9 @@ class UsersViewModel extends AsyncNotifier<UserProfileModel> {
       final profile = await _userRepository.getProfile(
         _authenticationRepository.user!.uid,
       );
+      if (profile != null) {
+        return UserProfileModel.fromJson(profile);
+      }
     }
     return UserProfileModel.empty();
   }
