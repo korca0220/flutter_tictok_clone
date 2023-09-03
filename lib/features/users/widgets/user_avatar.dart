@@ -32,20 +32,22 @@ class UserAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLoading = ref.watch(userAvatarProvider).isLoading;
-    return GestureDetector(
-      onTap: isLoading ? null : () => _onAvatarTap(context, ref),
-      child: isLoading
-          ? Container(
-              width: 100,
-              height: 100,
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-              ),
-              child: const CircularProgressIndicator(),
-            )
-          : CircleAvatar(
+    return ref.watch(userAvatarProvider).when(
+          error: (error, stackTrace) => const Center(
+            child: Text('Error'),
+          ),
+          loading: () => Container(
+            width: 100,
+            height: 100,
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+            ),
+            child: const CircularProgressIndicator(),
+          ),
+          data: (data) => GestureDetector(
+            onTap: () => _onAvatarTap(context, ref),
+            child: CircleAvatar(
               radius: 50,
               foregroundImage: hasAvatar
                   ? NetworkImage(
@@ -54,6 +56,7 @@ class UserAvatar extends ConsumerWidget {
                   : null,
               child: Text(name),
             ),
-    );
+          ),
+        );
   }
 }
