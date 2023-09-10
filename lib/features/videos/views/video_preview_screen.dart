@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gal/gal.dart';
 import 'package:video_player/video_player.dart';
 
-import '../view_models/timeline_view_model.dart';
+import '../view_models/upload_video_view_model.dart';
 
 class VideoPreviewScreen extends ConsumerStatefulWidget {
   const VideoPreviewScreen({
@@ -60,7 +60,10 @@ class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
   }
 
   void _onUploadPressed() {
-    ref.read(timelineProvider.notifier).uploadVideo();
+    ref.read(uploadVideoProvider.notifier).uploadVideo(
+          File(widget.video.path),
+          context,
+        );
   }
 
   @override
@@ -72,8 +75,10 @@ class VideoPreviewScreenState extends ConsumerState<VideoPreviewScreen> {
         actions: [
           if (widget.isPicked == false)
             IconButton(
-              onPressed: _onUploadPressed,
-              icon: ref.watch(timelineProvider).isLoading
+              onPressed: ref.watch(uploadVideoProvider).isLoading
+                  ? () {}
+                  : _onUploadPressed,
+              icon: ref.watch(uploadVideoProvider).isLoading
                   ? const CircularProgressIndicator()
                   : FaIcon(
                       savedVideo
