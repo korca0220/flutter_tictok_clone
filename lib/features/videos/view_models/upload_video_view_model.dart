@@ -47,7 +47,8 @@ class UploadVideoViewModel extends AsyncNotifier<void> {
               createdAt: DateTime.now().millisecondsSinceEpoch,
             ),
           );
-          context.pushReplacement('/home');
+          context.pop();
+          context.pop();
         }
       });
     }
