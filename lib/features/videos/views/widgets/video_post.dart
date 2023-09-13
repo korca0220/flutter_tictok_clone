@@ -6,16 +6,20 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../../constants/gaps.dart';
 import '../../../../constants/sizes.dart';
+import '../../repos/video_model.dart';
 import '../../view_models/playback_config_view_model.dart';
 import 'video_button.dart';
 import 'video_comments.dart';
 
 class VideoPost extends ConsumerStatefulWidget {
-  final int index;
   const VideoPost({
     super.key,
     required this.index,
+    required this.videoData,
   });
+
+  final int index;
+  final VideoModel videoData;
 
   @override
   VideoPostState createState() => VideoPostState();
@@ -117,8 +121,9 @@ class VideoPostState extends ConsumerState<VideoPost>
           Positioned.fill(
             child: _videoController.value.isInitialized
                 ? VideoPlayer(_videoController)
-                : Container(
-                    color: Colors.black,
+                : Image.network(
+                    widget.videoData.thumbnailUrl,
+                    fit: BoxFit.cover,
                   ),
           ),
           Positioned.fill(
@@ -172,9 +177,9 @@ class VideoPostState extends ConsumerState<VideoPost>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  '@Junewoo',
-                  style: TextStyle(
+                Text(
+                  '@${widget.videoData.creator}',
+                  style: const TextStyle(
                     fontSize: Sizes.size20,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -186,7 +191,7 @@ class VideoPostState extends ConsumerState<VideoPost>
                     SizedBox(
                       width: 200,
                       child: Text(
-                        'This is my house in Korea lalalalalalal',
+                        widget.videoData.description,
                         maxLines: _isMoreText ? null : 1,
                         style: const TextStyle(
                           fontSize: Sizes.size16,
@@ -216,14 +221,14 @@ class VideoPostState extends ConsumerState<VideoPost>
             right: 10,
             child: Column(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 25,
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   foregroundImage: NetworkImage(
-                    'https://avatars.githubusercontent.com/u/25660275?v=4',
+                    'https://firebasestorage.googleapis.com/v0/b/tik-tok-junewoo.appspot.com/o/avatars%2F${widget.videoData.creatorUid}?alt=media&token=b15373e4-a8b7-4a0d-8f8a-0e2d907cbd63',
                   ),
-                  child: Text('준우'),
+                  child: Text(widget.videoData.creator),
                 ),
                 Gaps.v24,
                 const VideoButton(

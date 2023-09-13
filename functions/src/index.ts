@@ -7,6 +7,7 @@ admin.initializeApp();
 export const onVideoCreated = functions.firestore
     .document("videos/{videoId}")
     .onCreate(async (snapshot, context) => {
+        const { getStorage, getDownloadURL } = require('firebase-admin/storage');
         const spawn = require("child-process-promise").spawn;
         const video = snapshot.data();
         await spawn("ffmpeg", [
@@ -20,8 +21,8 @@ export const onVideoCreated = functions.firestore
             "scale=150:-1",
             `/tmp/${snapshot.id}.jpg`,
         ]);
-        const storage = admin.storage();
-        const [file, _] = await storage.bucket().upload(`/tmp/${snapshot.id}.jpg`, {
+
+        const [file, _] = await getStorage.bucket().upload(`/tmp/${snapshot.id}.jpg`, {
             destination: `thumbnails/${snapshot.id}.jpg`,
         });
 
@@ -30,9 +31,10 @@ export const onVideoCreated = functions.firestore
         });
 
         const db = admin.firestore();
+        const downloadUrl = await getDownloadURL(file);
 
         db.collection("users").doc(video.creatorUid).collection("videos").doc(snapshot.id).set({
-            thumbnailUrl: file.publicUrl(),
+            thumbnailUrl: downloadUrl,
             videoId: snapshot.id,
         });
 
