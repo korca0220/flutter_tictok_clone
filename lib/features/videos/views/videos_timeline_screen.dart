@@ -16,7 +16,7 @@ class VideosTimelineScreenState extends ConsumerState<VideosTimelineScreen> {
   final _scrollDuration = const Duration(milliseconds: 250);
   final _scrollCurve = Curves.linear;
 
-  int _itemCount = 4;
+  int _itemCount = 0;
 
   void _onPageChanged(int page) {
     _pageController.animateToPage(
@@ -25,8 +25,7 @@ class VideosTimelineScreenState extends ConsumerState<VideosTimelineScreen> {
       curve: _scrollCurve,
     );
     if (page == _itemCount - 1) {
-      _itemCount = _itemCount + 4;
-      setState(() {});
+      ref.watch(timelineProvider.notifier).fetchNextPage();
     }
   }
 
@@ -42,25 +41,29 @@ class VideosTimelineScreenState extends ConsumerState<VideosTimelineScreen> {
           loading: () => const Center(
             child: CircularProgressIndicator(),
           ),
-          data: (videos) => RefreshIndicator(
-            onRefresh: _onRefresh,
-            displacement: 50,
-            edgeOffset: 20,
-            color: Theme.of(context).primaryColor,
-            child: PageView.builder(
-              controller: _pageController,
-              scrollDirection: Axis.vertical,
-              onPageChanged: _onPageChanged,
-              itemCount: videos.length,
-              itemBuilder: (context, index) {
-                final videoData = videos[index];
-                return VideoPost(
-                  index: index,
-                  videoData: videoData,
-                );
-              },
-            ),
-          ),
+          data: (videos) {
+            _itemCount = videos.length;
+
+            return RefreshIndicator(
+              onRefresh: _onRefresh,
+              displacement: 50,
+              edgeOffset: 20,
+              color: Theme.of(context).primaryColor,
+              child: PageView.builder(
+                controller: _pageController,
+                scrollDirection: Axis.vertical,
+                onPageChanged: _onPageChanged,
+                itemCount: videos.length,
+                itemBuilder: (context, index) {
+                  final videoData = videos[index];
+                  return VideoPost(
+                    index: index,
+                    videoData: videoData,
+                  );
+                },
+              ),
+            );
+          },
         );
   }
 
