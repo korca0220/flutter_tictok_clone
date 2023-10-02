@@ -57,10 +57,10 @@ export const onLikedCreated = functions.firestore
         await db
             .collection("users")
             .doc(userId)
-            .collection("videos")
+            .collection("likes")
             .doc(videoId)
             .set({
-                createdAt: admin.firestore.FieldValue.increment(1),
+                createdAt: Date.now()
             });
     });
 
@@ -79,7 +79,7 @@ export const onLikedRemoved = functions.firestore
         await db
             .collection("users")
             .doc(userId)
-            .collection("videos")
+            .collection("likes")
             .doc(videoId)
             .delete();
     })

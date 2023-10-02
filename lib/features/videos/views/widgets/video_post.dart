@@ -36,7 +36,10 @@ class VideoPostState extends ConsumerState<VideoPost>
 
   bool _isPaused = false;
   bool _isMoreText = false;
+
   late bool _isMuted = ref.read(playbackConfigProvider).muted;
+  bool _isLiked = false;
+  int _isLikeCount = 0;
 
   void _onVisibilityChanged(VisibilityInfo info) {
     if (!mounted) return;
@@ -71,10 +74,19 @@ class VideoPostState extends ConsumerState<VideoPost>
     });
   }
 
+  void _initLikedVideo() async {
+    _isLiked = await ref
+        .read(videoPostProvider(widget.videoData.id).notifier)
+        .isLikeVideo();
+
+    _isLikeCount = widget.videoData.likes;
+  }
+
   @override
   void initState() {
     super.initState();
     _initVideoPlayer();
+    _initLikedVideo();
 
     _animationController = AnimationController(
       vsync: this,
@@ -114,6 +126,15 @@ class VideoPostState extends ConsumerState<VideoPost>
 
   void _onLikeTap() {
     ref.read(videoPostProvider(widget.videoData.id).notifier).likeVideo();
+
+    if (_isLiked) {
+      _isLikeCount--;
+    } else {
+      _isLikeCount++;
+    }
+    _isLiked = !_isLiked;
+
+    setState(() {});
   }
 
   @override
@@ -236,12 +257,11 @@ class VideoPostState extends ConsumerState<VideoPost>
                   child: Text(widget.videoData.creator),
                 ),
                 Gaps.v24,
-                GestureDetector(
+                VideoButton(
+                  icon: FontAwesomeIcons.solidHeart,
+                  text: _isLikeCount.toString(),
+                  color: _isLiked ? Colors.red : Colors.white,
                   onTap: _onLikeTap,
-                  child: VideoButton(
-                    icon: FontAwesomeIcons.solidHeart,
-                    text: '${widget.videoData.likes}',
-                  ),
                 ),
                 Gaps.v24,
                 GestureDetector(
@@ -249,12 +269,14 @@ class VideoPostState extends ConsumerState<VideoPost>
                   child: const VideoButton(
                     icon: FontAwesomeIcons.solidComment,
                     text: '3.9M',
+                    color: Colors.white,
                   ),
                 ),
                 Gaps.v24,
                 const VideoButton(
                   icon: FontAwesomeIcons.share,
                   text: 'Share',
+                  color: Colors.white,
                 ),
               ],
             ),

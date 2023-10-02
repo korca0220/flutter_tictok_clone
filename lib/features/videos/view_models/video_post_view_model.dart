@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../authentication/repos/authentication_repo.dart';
@@ -12,17 +13,21 @@ final videoPostProvider =
 
 class VideoPostVideModel extends FamilyAsyncNotifier<void, String> {
   late final VideosRepository _repository;
-  late final _videoId;
+  late final String _videoId;
+  late final User? _user;
 
   @override
   FutureOr<void> build(String arg) {
     _videoId = arg;
+    _user = ref.read(authRepo).user;
     _repository = ref.read(videosRepo);
   }
 
   Future<void> likeVideo() async {
-    final user = ref.read(authRepo).user;
+    await _repository.likeVideo(_videoId, _user!.uid);
+  }
 
-    await _repository.likeVideo(_videoId, user!.uid);
+  Future<bool> isLikeVideo() async {
+    return await _repository.isLiked(_videoId, _user!.uid);
   }
 }
