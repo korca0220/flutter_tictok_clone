@@ -29,6 +29,10 @@ class VideosTimelineScreenState extends ConsumerState<VideosTimelineScreen> {
     }
   }
 
+  Future<void> _onRefresh() {
+    return ref.watch(timelineProvider.notifier).refresh();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ref.watch(timelineProvider).when(
@@ -65,9 +69,5 @@ class VideosTimelineScreenState extends ConsumerState<VideosTimelineScreen> {
             );
           },
         );
-  }
-
-  Future<void> _onRefresh() {
-    return Future.delayed(const Duration(seconds: 3));
   }
 }

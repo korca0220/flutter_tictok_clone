@@ -8,6 +8,7 @@ import '../../../../constants/gaps.dart';
 import '../../../../constants/sizes.dart';
 import '../../repos/video_model.dart';
 import '../../view_models/playback_config_view_model.dart';
+import '../../view_models/video_post_view_model.dart';
 import 'video_button.dart';
 import 'video_comments.dart';
 
@@ -109,6 +110,10 @@ class VideoPostState extends ConsumerState<VideoPost>
       builder: (context) => const VideoComments(),
     );
     _onTogglePause();
+  }
+
+  void _onLikeTap() {
+    ref.read(videoPostProvider(widget.videoData.id).notifier).likeVideo();
   }
 
   @override
@@ -231,9 +236,12 @@ class VideoPostState extends ConsumerState<VideoPost>
                   child: Text(widget.videoData.creator),
                 ),
                 Gaps.v24,
-                const VideoButton(
-                  icon: FontAwesomeIcons.solidHeart,
-                  text: '2.9M',
+                GestureDetector(
+                  onTap: _onLikeTap,
+                  child: VideoButton(
+                    icon: FontAwesomeIcons.solidHeart,
+                    text: '${widget.videoData.likes}',
+                  ),
                 ),
                 Gaps.v24,
                 GestureDetector(
