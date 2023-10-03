@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,9 +21,11 @@ class VideoRecordingScreen extends StatefulWidget {
 }
 
 class _VideoRecordingScreenState extends State<VideoRecordingScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   bool hasPermission = false;
   bool isSelfieMode = false;
+
+  late final bool _noCamera = kDebugMode && Platform.isIOS;
 
   late FlashMode flashMode;
 
@@ -48,7 +53,15 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   void initState() {
     super.initState();
 
-    initPermissions();
+    if (!_noCamera) {
+      initPermissions();
+    } else {
+      setState(() {
+        hasPermission = true;
+      });
+    }
+    WidgetsBinding.instance.addObserver(this);
+
     progressAnimationController.addListener(() {
       setState(() {});
     });
@@ -65,8 +78,23 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
   void dispose() {
     progressAnimationController.dispose();
     animationController.dispose();
-    cameraController.dispose();
+    if (!_noCamera) {
+      cameraController.dispose();
+    }
+
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_noCamera) return;
+    if (!hasPermission) return;
+    if (!cameraController.value.isInitialized) return;
+    if (state == AppLifecycleState.inactive) {
+      cameraController.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      initCamera();
+    }
   }
 
   Future<void> initPermissions() async {
@@ -164,26 +192,29 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
       backgroundColor: Colors.black,
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
-        child: !hasPermission || !cameraController.value.isInitialized
+        child: !hasPermission
             ? const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Yoi don\'t grant permission.',
+                    'Initializing...',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: Sizes.size20,
                     ),
                   ),
                   Gaps.v20,
-                  CircularProgressIndicator.adaptive()
+                  CircularProgressIndicator.adaptive(
+                    backgroundColor: Colors.white,
+                  )
                 ],
               )
             : Stack(
                 alignment: Alignment.center,
                 children: [
-                  CameraPreview(cameraController),
+                  if (!_noCamera && cameraController.value.isInitialized)
+                    CameraPreview(cameraController),
                   const Positioned(
                     top: Sizes.size40,
                     left: Sizes.size20,
@@ -191,51 +222,52 @@ class _VideoRecordingScreenState extends State<VideoRecordingScreen>
                       color: Colors.white,
                     ),
                   ),
-                  Positioned(
-                    top: Sizes.size20,
-                    right: Sizes.size20,
-                    child: Column(
-                      children: [
-                        IconButton(
-                          onPressed: toggleSelfieMode,
-                          icon: const Icon(Icons.cameraswitch),
-                          color: Colors.white,
-                        ),
-                        Gaps.v10,
-                        IconButton(
-                          onPressed: () => setFlashMode(FlashMode.off),
-                          icon: const Icon(Icons.flash_off_rounded),
-                          color: flashMode == FlashMode.off
-                              ? Colors.amber.shade200
-                              : Colors.white,
-                        ),
-                        Gaps.v10,
-                        IconButton(
-                          onPressed: () => setFlashMode(FlashMode.always),
-                          icon: const Icon(Icons.flash_on_rounded),
-                          color: flashMode == FlashMode.always
-                              ? Colors.amber.shade200
-                              : Colors.white,
-                        ),
-                        Gaps.v10,
-                        IconButton(
-                          onPressed: () => setFlashMode(FlashMode.auto),
-                          icon: const Icon(Icons.flash_auto_rounded),
-                          color: flashMode == FlashMode.auto
-                              ? Colors.amber.shade200
-                              : Colors.white,
-                        ),
-                        Gaps.v10,
-                        IconButton(
-                          onPressed: () => setFlashMode(FlashMode.torch),
-                          icon: const Icon(Icons.flashlight_on_rounded),
-                          color: flashMode == FlashMode.torch
-                              ? Colors.amber.shade200
-                              : Colors.white,
-                        ),
-                      ],
+                  if (!_noCamera)
+                    Positioned(
+                      top: Sizes.size20,
+                      right: Sizes.size20,
+                      child: Column(
+                        children: [
+                          IconButton(
+                            onPressed: toggleSelfieMode,
+                            icon: const Icon(Icons.cameraswitch),
+                            color: Colors.white,
+                          ),
+                          Gaps.v10,
+                          IconButton(
+                            onPressed: () => setFlashMode(FlashMode.off),
+                            icon: const Icon(Icons.flash_off_rounded),
+                            color: flashMode == FlashMode.off
+                                ? Colors.amber.shade200
+                                : Colors.white,
+                          ),
+                          Gaps.v10,
+                          IconButton(
+                            onPressed: () => setFlashMode(FlashMode.always),
+                            icon: const Icon(Icons.flash_on_rounded),
+                            color: flashMode == FlashMode.always
+                                ? Colors.amber.shade200
+                                : Colors.white,
+                          ),
+                          Gaps.v10,
+                          IconButton(
+                            onPressed: () => setFlashMode(FlashMode.auto),
+                            icon: const Icon(Icons.flash_auto_rounded),
+                            color: flashMode == FlashMode.auto
+                                ? Colors.amber.shade200
+                                : Colors.white,
+                          ),
+                          Gaps.v10,
+                          IconButton(
+                            onPressed: () => setFlashMode(FlashMode.torch),
+                            icon: const Icon(Icons.flashlight_on_rounded),
+                            color: flashMode == FlashMode.torch
+                                ? Colors.amber.shade200
+                                : Colors.white,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
                   Positioned(
                     bottom: Sizes.size40,
                     width: MediaQuery.of(context).size.width,

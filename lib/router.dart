@@ -10,7 +10,7 @@ import 'features/inbox/activity_screen.dart';
 import 'features/inbox/chat_detail_screen.dart';
 import 'features/inbox/chats_screen.dart';
 import 'features/onboading/interests_screen.dart';
-import 'features/videos/views/widgets/video_recording_screen.dart';
+import 'features/videos/views/video_recording_screen.dart';
 
 final routerProvider = Provider(
   (ref) {
