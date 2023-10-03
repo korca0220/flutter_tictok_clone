@@ -17,7 +17,7 @@ final messagesChatProvider =
 
   return db
       .collection('chat_rooms')
-      .doc('9fjegk3QyMadsoNpBeCM')
+      .doc('esvOK0onpVevXpcXeRmfLt9ZEHy2@@@0z89sqcEbgg1OiBeZSGlEKU9wlx2')
       .collection('texts')
       .orderBy('createdAt')
       .snapshots()

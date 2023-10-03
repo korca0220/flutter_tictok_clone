@@ -83,3 +83,29 @@ export const onLikedRemoved = functions.firestore
             .doc(videoId)
             .delete();
     })
+
+export const onChatRoomCreated = functions.firestore
+    .document("chat_rooms/{chatRoomId}")
+    .onDelete(async (snapshot, context) => {
+        const db = admin.firestore();
+        const [personA, personB] = snapshot.id.split("@@@");
+        const chatId = snapshot.id;
+
+        await db
+            .collection("users")
+            .doc(personA)
+            .collection("chats")
+            .doc(chatId)
+            .set(
+                { createdAt: Date.now() }
+            );
+
+        await db
+            .collection("users")
+            .doc(personB)
+            .collection("chats")
+            .doc(chatId)
+            .set(
+                { createdAt: Date.now() }
+            );
+    })
