@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants/sizes.dart';
-import 'features/notification/notifications_provider.dart';
 import 'features/videos/repos/playback_config_repo.dart';
 import 'features/videos/view_models/playback_config_view_model.dart';
 import 'firebase_options.dart';
@@ -45,7 +44,6 @@ class TikTokApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(notificationsProvider);
     return MaterialApp.router(
       routerConfig: ref.watch(routerProvider),
       debugShowCheckedModeBanner: false,
