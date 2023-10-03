@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../constants/gaps.dart';
 import '../../constants/sizes.dart';
+import 'view_models/meesages_view_model.dart';
 
-class ChatDetailScreen extends StatefulWidget {
+class ChatDetailScreen extends ConsumerStatefulWidget {
   static const String routeName = 'chatDetail';
   static const String routeURL = ':chatId';
   const ChatDetailScreen({
@@ -15,13 +17,26 @@ class ChatDetailScreen extends StatefulWidget {
   final String chatId;
 
   @override
-  State<ChatDetailScreen> createState() => _ChatDetailScreenState();
+  ConsumerState<ChatDetailScreen> createState() => _ChatDetailScreenState();
 }
 
-class _ChatDetailScreenState extends State<ChatDetailScreen> {
+class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
+  final TextEditingController _textEditingController = TextEditingController();
+
+  Future<void> _onSendPressed() async {
+    final text = _textEditingController.text;
+    if (text == '') {
+      return;
+    } else {
+      await ref.read(messagesProvider.notifier).sendMessage(text);
+      _textEditingController.clear();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(widget.chatId);
+    final isLoading = ref.watch(messagesProvider).isLoading;
+
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -115,11 +130,12 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                 children: [
                   Expanded(
                     child: TextField(
+                      controller: _textEditingController,
                       minLines: null,
                       maxLines: null,
                       decoration: InputDecoration(
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: Colors.grey.shade300,
                         hintText: 'Send a message...',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(Sizes.size12),
@@ -145,11 +161,13 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                       ),
                     ),
                   ),
-                  CircleAvatar(
-                    backgroundColor: Colors.grey.shade300,
-                    child: const FaIcon(
-                      FontAwesomeIcons.paperPlane,
-                      color: Colors.white,
+                  Gaps.h20,
+                  GestureDetector(
+                    onTap: !isLoading ? _onSendPressed : null,
+                    child: FaIcon(
+                      isLoading
+                          ? FontAwesomeIcons.hourglass
+                          : FontAwesomeIcons.paperPlane,
                       size: Sizes.size20,
                     ),
                   ),
